@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblocks Treasure Hunt</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='profi.css') }}">
+</head>
+<body>
+
+    <header class="game-header">
+        <h1>Schatzkarten Quiz</h1>
+        <div id="status-bar" class="{% if not logged_in %}hidden{% endif %}">
+            <span id="CurrentMap">Map: {{ level if level else 1 }}</span>
+            <span id="PlayerLegend">Züge: {{ stamina if stamina else 15 }}</span>
+            <span id="SchuldenAnzeige">Schulden: 0</span>
+            <span id="BonusPoints">Bonus: 0</span>
+            <span id="UserLoginInScreen">{{ session['user'] if 'user' in session else 'Gast' }}</span>
+            <button id="LogoutLink" class="btn-small">Logout</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="page-login" class="page {% if not logged_in %}active visible{% else %}hidden{% endif %}">            <div class="card shadow">
+                <p>Willkommen! Erreiche das Ziel, bevor deine Energie verbraucht ist.</p>
+                <form id="Formular" class="vertical-form">
+                    <input type="text" id="UserName" placeholder="Benutzername" required>
+                    <input type="password" id="UserLogin" placeholder="Passwort" required>
+                    <button type="submit" class="btn-primary">Spiel starten</button>
+                </form>
+                <p class="small-text">Noch kein Account? <a href="#" id="RegisterLink">Registrieren</a></p>
+            </div>
+        </section>
+
+        <section id="page-game" class="page {% if logged_in %}active visible{% else %}hidden{% endif %}">
+            <div id="game-grid" class="map-grid"></div>
+        </section>
+    </main>
+
+    <div class="overlay" id="register-overlay">
+        <div class="card modal">
+            <h3>Neuen Account erstellen</h3>
+            <form id="JoinAccount" class="vertical-form">
+                <input type="text" id="CreateUser" placeholder="Wunschname" required>
+                <input type="password" id="CreateLogin" placeholder="Passwort" required>
+                <div class="button-group">
+                    <button type="button" class="btn-secondary" id="GoBack">Abbrechen</button>
+                    <button type="submit" class="btn-primary">Erstellen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='profi.js') }}"></script>
+</body>
+</html>
