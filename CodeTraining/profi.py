@@ -126,17 +126,19 @@ def Move():
     event_name = "move"
     level_up = map_id
     bonus_zuwachs = 0
+    echte_schulden = 0
     neue_start_pos = pos
     neue_goal_pos = map_daten['goal_pos']
     neue_tiles = map_daten['special_tiles']
 
+    # 1. Zuerst prüfen: Ist er auf dem Ziel gelandet? (Damit er den Bonus kriegt!)
     if pos == map_daten['goal_pos']:
         event_name = "goal"
-        level_up += 1
+        level_up = map_id + 1
+        bonus_zuwachs = user_daten['stamina'] # Dein Bonus!
+        stamina_change = (15 - user_daten['stamina']) 
+        neu_stamina = 15 # Direkt auf 15 setzen
 
-        bonus_zuwachs = user_daten['stamina']
-        stamina_change = (15 - user_daten['stamina']) # Setzt auf 15 zurück
-        
         cursor.execute("SELECT start_pos, goal_pos, special_tiles FROM profi_maps WHERE map_id = %s", [level_up])
         next_map = cursor.fetchone()
         if next_map:
@@ -144,25 +146,36 @@ def Move():
             neue_start_pos = pos
             neue_goal_pos = next_map['goal_pos']
             neue_tiles = next_map['special_tiles']
-    
+
+    # 2. Wenn nicht Ziel, hat er vielleicht keine Energie mehr?
+    elif (user_daten['stamina'] + stamina_change) < 0:
+        event_name = "SchuldenKonto"
+        echte_schulden = abs(user_daten['stamina'] + stamina_change)
+        level_up = map_id + 1
+        neu_stamina = 15
+
+        cursor.execute("SELECT start_pos, goal_pos, special_tiles FROM profi_maps WHERE map_id = %s", [level_up])
+        next_map = cursor.fetchone()
+        if next_map:
+            pos = next_map['start_pos']
+            neue_start_pos = pos
+            neue_goal_pos = next_map['goal_pos']
+            neue_tiles = next_map['special_tiles']
+
+    # 3. Wenn weder Ziel noch Schulden, dann Spezialfelder prüfen
     elif pos in special.get('gold', []):
-        stamina_change += 5 # -1 + 5 = +4 effektiv
+        stamina_change += 5
         event_name = "boost"
     elif pos in special.get('bombs', []):
-        stamina_change += -5 # -1 + -5 = -6 effektiv
+        stamina_change += -5
         event_name = "bombe"
     elif pos in special.get('chaos', []):
         effekt = random.choice([5, -5])
         stamina_change += effekt
         event_name = "chaos"
 
-    neu_stamina = user_daten['stamina'] + stamina_change
-    echte_schulden = 0
-
-    if neu_stamina < 0:
-        echte_schulden = abs(neu_stamina)
-        neu_stamina = 15
-        event_name = "SchuldenKonto"
+    if event_name not in ["goal", "SchuldenKonto"]:
+        neu_stamina = user_daten['stamina'] + stamina_change
 
     update_sql = """
         UPDATE profi_nutzer 

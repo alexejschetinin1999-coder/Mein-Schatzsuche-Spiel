@@ -161,9 +161,11 @@ function createGrid(count) {
 // --- GAME LOGIK (KLICK) ---
 document.getElementById('game-grid').addEventListener('click', async (e) => {
     const tile = e.target.closest('.tileContainer');
-    if (!tile || tile.querySelector('.is-flipped')) return;
 
+    if (!tile) return;
     const pos = parseInt(tile.dataset.index);
+
+    if (tile.querySelector('.is-flipped') && pos !== gameState.goal_pos) return;
     
     // Distanz-Check
     const diff = Math.abs(pos - gameState.currentPos);
