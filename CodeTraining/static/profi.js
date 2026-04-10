@@ -166,11 +166,23 @@ document.getElementById('game-grid').addEventListener('click', async (e) => {
     const pos = parseInt(tile.dataset.index);
 
     if (tile.querySelector('.is-flipped') && pos !== gameState.goal_pos) return;
-    
-    // Distanz-Check
+
     const diff = Math.abs(pos - gameState.currentPos);
-    if (diff !== 1 && diff !== 10) {
-        alert("Nur angrenzende Felder!");
+
+    if (diff === 1 || diff === 10) {
+    
+        if (diff === 1) {
+            const oldRow = Math.floor(gameState.currentPos / 10);
+            const newRow = Math.floor(pos / 10);
+        
+            if (oldRow !== newRow) {
+                alert("Du kannst nicht durch die Wand gehen!");
+                return; // Stopp!
+            }
+        }
+
+    } else {
+        alert("Du kannst nur ein Feld weit gehen!");
         return;
     }
 
@@ -178,7 +190,8 @@ document.getElementById('game-grid').addEventListener('click', async (e) => {
     
     if (result && result.status === 'success') {
         // WICHTIG: Python schickt "NewStamina", JS muss es annehmen
-        gameState.stamina = result.NewStamina; 
+        gameState.stamina = result.NewStamina;
+        gameState.bonus = result.new_bonus; 
         gameState.currentPos = pos;
         
         // UI Update

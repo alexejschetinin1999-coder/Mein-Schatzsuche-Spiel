@@ -17,10 +17,31 @@ DB_CONFIG = {
 def get_db_connection():
     return mysql.connector.connect(**DB_CONFIG)
 
+# NEU: Die Hilfsfunktion, um doppelten Code zu vermeiden
+def get_user_game_data(username):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    # Holt alle Spalten für den User
+    cursor.execute("SELECT * FROM profi_nutzer WHERE username = %s", [username])
+    user = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    return user
+
 @app.route('/')
 def index():
-    is_logged_in = 'user' in session
-    return render_template('profi.html', logged_in=is_logged_in)
+    username = session.get('user')
+    if username:
+        data = get_user_game_data(username)
+        return render_template('profi.html', 
+                               logged_in=True, 
+                               username=data['username'],
+                               level=data['current_map'], 
+                               stamina=data['stamina'],
+                               schulden=data['roblocks_schulden'],
+                               bonus=data['bonus_points'])
+    
+    return render_template('profi.html', logged_in=False, level=1, stamina=15, schulden=0, bonus=0)
 
 @app.route('/Register', methods=['POST'])
 def register():
