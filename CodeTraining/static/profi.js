@@ -5,6 +5,9 @@ const BonusPoints = document.getElementById("BonusPoints");
 const UserLoginInScreen = document.getElementById("UserLogInScreen");
 const LogoutLink = document.getElementById("LogoutLink");
 const overlay = document.querySelector('.overlay');
+const AlertMove = document.getElementById("AlertMove");
+const AlertCheat = document.getElementById("AlertCheat");
+const Remember = document.querySelector(".Remember");
 
 const gameState = {
     username: 'Gast',
@@ -166,11 +169,45 @@ document.getElementById('game-grid').addEventListener('click', async (e) => {
     const pos = parseInt(tile.dataset.index);
 
     if (tile.querySelector('.is-flipped') && pos !== gameState.goal_pos) return;
-    
-    // Distanz-Check
+
     const diff = Math.abs(pos - gameState.currentPos);
-    if (diff !== 1 && diff !== 10) {
-        alert("Nur angrenzende Felder!");
+
+<<<<<<< HEAD
+    // Schritt A: Ist der Zug überhaupt theoretisch möglich (1 Schritt weit)?
+    if (diff === 1 || diff === 10) {
+    
+        // Schritt B: Wenn es ein Seitwärtsschritt (1) ist, prüfe den Zeilenumbruch
+=======
+    if (diff === 1 || diff === 10) {
+    
+>>>>>>> f834a76e66b318d9d37b0cd16c8022f5a5384f38
+        if (diff === 1) {
+            const oldRow = Math.floor(gameState.currentPos / 10);
+            const newRow = Math.floor(pos / 10);
+        
+            if (oldRow !== newRow) {
+                alert("Du kannst nicht durch die Wand gehen!");
+<<<<<<< HEAD
+                AlertCheat.style.display = "flex";
+                return; // Stopp!
+            }
+        }
+    
+        // Wenn wir hier ankommen, ist der Zug erlaubt!
+        // Jetzt kommt der API-Fetch zu /Move...
+
+    } else {
+        // Wenn diff nicht 1 oder 10 ist (z.B. 2, 5 oder 50)
+        alert("Du kannst nur ein Feld weit gehen!");
+        AlertCheat.style.display = "flex";
+=======
+                return; // Stopp!
+            }
+        }
+
+    } else {
+        alert("Du kannst nur ein Feld weit gehen!");
+>>>>>>> f834a76e66b318d9d37b0cd16c8022f5a5384f38
         return;
     }
 
@@ -178,7 +215,8 @@ document.getElementById('game-grid').addEventListener('click', async (e) => {
     
     if (result && result.status === 'success') {
         // WICHTIG: Python schickt "NewStamina", JS muss es annehmen
-        gameState.stamina = result.NewStamina; 
+        gameState.stamina = result.NewStamina;
+        gameState.bonus = result.new_bonus; 
         gameState.currentPos = pos;
         
         // UI Update
@@ -203,12 +241,15 @@ document.getElementById('game-grid').addEventListener('click', async (e) => {
             location.reload(); // Reload um Energie & Level zu aktualisieren
         } else if (result.event === "boost") {
             alert("Du hast ein Koffe/Energy drink bekommen. Du hast jetzt + 5 Züge.");
+            AlertMove.style.display = "flex";
         } else if (result.event === "bombe") {
             alert("Du bist auf einer Bombe gestoßen. Jetzt hast du auf grund eines streif" + 
                 "schussen - 5 Züge weniger.");
+            AlertMove.style.display = "flex";
         } else if (result.event === "chaos") {
             alert("Du bist auf einer Stadt getroffen, Da nicht sicher sein kannst ob die dir" + 
                 "helfen oder nicht. Kannst du entweder 5 Züge +/- bekommen.");
+            AlertMove.style.display = "flex";
         }
     }
 });
@@ -287,3 +328,8 @@ function showGamePage() {
     updateUI();
     createGrid(100);
 }
+
+Remember.addEventListener("click", () => {
+    AlertMove.style.display = "none";
+    AlertCheat.style.display = "none";
+});
