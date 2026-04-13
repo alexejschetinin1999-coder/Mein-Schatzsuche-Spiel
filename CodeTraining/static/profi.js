@@ -172,43 +172,28 @@ document.getElementById('game-grid').addEventListener('click', async (e) => {
 
     const diff = Math.abs(pos - gameState.currentPos);
 
-<<<<<<< HEAD
-    // Schritt A: Ist der Zug überhaupt theoretisch möglich (1 Schritt weit)?
     if (diff === 1 || diff === 10) {
     
-        // Schritt B: Wenn es ein Seitwärtsschritt (1) ist, prüfe den Zeilenumbruch
-=======
-    if (diff === 1 || diff === 10) {
-    
->>>>>>> f834a76e66b318d9d37b0cd16c8022f5a5384f38
         if (diff === 1) {
             const oldRow = Math.floor(gameState.currentPos / 10);
             const newRow = Math.floor(pos / 10);
         
             if (oldRow !== newRow) {
                 alert("Du kannst nicht durch die Wand gehen!");
-<<<<<<< HEAD
                 AlertCheat.style.display = "flex";
                 return; // Stopp!
             }
-        }
-    
-        // Wenn wir hier ankommen, ist der Zug erlaubt!
-        // Jetzt kommt der API-Fetch zu /Move...
-
-    } else {
+        }    else {
         // Wenn diff nicht 1 oder 10 ist (z.B. 2, 5 oder 50)
         alert("Du kannst nur ein Feld weit gehen!");
         AlertCheat.style.display = "flex";
-=======
                 return; // Stopp!
             }
         }
 
     } else {
         alert("Du kannst nur ein Feld weit gehen!");
->>>>>>> f834a76e66b318d9d37b0cd16c8022f5a5384f38
-        return;
+          return;
     }
 
     const result = await apiPost('/Move', { position: pos, map_id: gameState.level });
@@ -318,8 +303,7 @@ function showGamePage() {
     loginPage.classList.add('hidden');
 
     // Spiel zeigen
-    const gamePage = document.getElementById('page-game');
-    gamePage.classList.remove('hidden');
+    const gamePage = document.getElementById('page-game');    gamePage.classList.remove('hidden');
     gamePage.classList.add('active', 'visible');
 
     // Status-Elemente zeigen (Das ersetzt das manuelle .style.display = "flex")
