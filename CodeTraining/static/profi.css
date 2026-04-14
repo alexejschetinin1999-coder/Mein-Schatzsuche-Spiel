@@ -184,45 +184,34 @@ p {
     padding: 5px;
 }
 
-#AlertMove {
+.ConfirmMessage {
     position: fixed;
     top: 30%;
     left: 50%;
     display: none;
-    justify-content: center;
     align-items: center;
-    height: 200px;
+    transform: translateX(-50%);
+    z-index: 2000;
+    padding: 20px;
     width: 400px;
+}
+
+.ConfirmMessage.StyleMove {
     background: #ff4081;
     color: white;
     border-radius: 0px 30px 0px 30px;
-    padding: 20px;
-    font-style: italic;
     box-shadow: 5px 5px 0px #3f51b5;
+    font-style: italic;
 }
 
-#AlertCheat {
-    position: fixed;
-    top: 30%;
-    left: 50%;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    height: 200px;
-    width: 400px;
+.ConfirmMessage.StyleCheat {
     background: #020202;
     color: #00ff00;
     border: 1px solid #00ff00;
     text-shadow: 0 0 5px #00ff00;
-    padding: 15px;
     font-family: 'Consolas', monospace;
 }
 
-.Remember {
-    padding: 5px;
-}
-
-/* Diese Klassen kommen in deine profi.css */
 .hidden {
     display: none !important;
 }

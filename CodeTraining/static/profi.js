@@ -5,9 +5,8 @@ const BonusPoints = document.getElementById("BonusPoints");
 const UserLoginInScreen = document.getElementById("UserLogInScreen");
 const LogoutLink = document.getElementById("LogoutLink");
 const overlay = document.querySelector('.overlay');
-const AlertMove = document.getElementById("AlertMove");
-const AlertCheat = document.getElementById("AlertCheat");
-const Remember = document.querySelector(".Remember");
+const UniversalAlert = document.getElementById("UniversalAlert");
+const AlertButton = document.getElementById("AlertButton");
 
 const gameState = {
     username: 'Gast',
@@ -50,6 +49,10 @@ overlay.addEventListener('click', (e) => {
 
 document.getElementById('RegisterLink').addEventListener('click', () => {
     overlay.style.display = "flex";
+});
+
+AlertButton.addEventListener("click", () => {
+    UniversalAlert.style.display = "none";
 });
 
 document.getElementById('JoinAccount').addEventListener('submit', async (e) => {
@@ -173,25 +176,19 @@ document.getElementById('game-grid').addEventListener('click', async (e) => {
     const diff = Math.abs(pos - gameState.currentPos);
 
     if (diff === 1 || diff === 10) {
-    
+
         if (diff === 1) {
             const oldRow = Math.floor(gameState.currentPos / 10);
             const newRow = Math.floor(pos / 10);
         
             if (oldRow !== newRow) {
-                alert("Du kannst nicht durch die Wand gehen!");
-                AlertCheat.style.display = "flex";
-                return; // Stopp!
+                ShowCustomAlert("Du kannst nicht durch die Wand gehen!", "StyleCheat");
+                return;
             }
-        }    else {
-        // Wenn diff nicht 1 oder 10 ist (z.B. 2, 5 oder 50)
-        alert("Du kannst nur ein Feld weit gehen!");
-        AlertCheat.style.display = "flex";
-                return; // Stopp!
-            }
-        } else {
-        alert("Du kannst nur ein Feld weit gehen!");
-          return;
+        }
+    } else {
+        ShowCustomAlert("Du kannst nur ein Feld weit gehen!", "StyleCheat");
+        return;
     }
 
     const result = await apiPost('/Move', { position: pos, map_id: gameState.level });
@@ -223,16 +220,14 @@ document.getElementById('game-grid').addEventListener('click', async (e) => {
             alert(`Energie leer! Du hast ${result.new_debt} Schulden gemacht.`);
             location.reload(); // Reload um Energie & Level zu aktualisieren
         } else if (result.event === "boost") {
-            alert("Du hast ein Koffe/Energy drink bekommen. Du hast jetzt + 5 Züge.");
-            AlertMove.style.display = "flex";
+            ShowCustomAlert("Du hast ein Koffe/Energy drink bekommen. Du hast jetzt " +
+                "+ 5 Züge.", "StyleMove");
         } else if (result.event === "bombe") {
-            alert("Du bist auf einer Bombe gestoßen. Jetzt hast du auf grund eines streif" + 
-                "schussen - 5 Züge weniger.");
-            AlertMove.style.display = "flex";
+            ShowCustomAlert("Du bist auf einer Bombe gestoßen. Jetzt hast du auf grund eines " 
+                + "streifschussen - 5 Züge weniger.", "StyleMove");
         } else if (result.event === "chaos") {
-            alert("Du bist auf einer Stadt getroffen, Da nicht sicher sein kannst ob die dir" + 
-                "helfen oder nicht. Kannst du entweder 5 Züge +/- bekommen.");
-            AlertMove.style.display = "flex";
+            ShowCustomAlert("Du bist auf einer Stadt getroffen, Da nicht sicher sein kannst ob " +
+                 "die dir helfen oder nicht. Kannst du entweder 5 Züge +/- bekommen.", "StyleMove");
         }
     }
 });
@@ -311,7 +306,13 @@ function showGamePage() {
     createGrid(100);
 }
 
-Remember.addEventListener("click", () => {
-    AlertMove.style.display = "none";
-    AlertCheat.style.display = "none";
-});
+function ShowCustomAlert(Nachricht, StyleKlasse) {
+    const AlertBox = document.getElementById("UniversalAlert");
+    const AlertText = document.getElementById("AlertText");
+
+    AlertText.textContent = Nachricht;
+
+    AlertBox.className = "ConfirmMessage " + StyleKlasse;
+
+    AlertBox.style.display = "block";
+}
