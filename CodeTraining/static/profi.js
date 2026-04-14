@@ -189,9 +189,7 @@ document.getElementById('game-grid').addEventListener('click', async (e) => {
         AlertCheat.style.display = "flex";
                 return; // Stopp!
             }
-        }
-
-    } else {
+        } else {
         alert("Du kannst nur ein Feld weit gehen!");
           return;
     }

@@ -33,10 +33,6 @@ def index():
     username = session.get('user')
     if username:
         data = get_user_game_data(username)
-<<<<<<< HEAD
-        # Wir geben ALLES an das HTML-Template weiter, um Flackern zu verhindern
-=======
->>>>>>> f834a76e66b318d9d37b0cd16c8022f5a5384f38
         return render_template('profi.html', 
                                logged_in=True, 
                                username=data['username'],
@@ -45,10 +41,7 @@ def index():
                                schulden=data['roblocks_schulden'],
                                bonus=data['bonus_points'])
     
-<<<<<<< HEAD
-    # Standardwerte für Gäste/Nicht eingeloggte User
-=======
->>>>>>> f834a76e66b318d9d37b0cd16c8022f5a5384f38
+
     return render_template('profi.html', logged_in=False, level=1, stamina=15, schulden=0, bonus=0)
 
 @app.route('/Register', methods=['POST'])
