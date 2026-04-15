@@ -194,9 +194,11 @@ document.getElementById('game-grid').addEventListener('click', async (e) => {
     const result = await apiPost('/Move', { position: pos, map_id: gameState.level });
     
     if (result && result.status === 'success') {
-        // WICHTIG: Python schickt "NewStamina", JS muss es annehmen
+
+        console.log("Server Antwort:", result); // SCHRITT 1: Schau in die F12 Konsole!
+
         gameState.stamina = result.NewStamina;
-        gameState.bonus = result.new_bonus; 
+        gameState.bonus = result.new_bonus;
         gameState.currentPos = pos;
         
         // UI Update
@@ -243,7 +245,7 @@ function updateUI() {
 
     if (BonusPoints) {
         BonusPoints.textContent = `Bonus: ${gameState.bonus}`;
-    }
+    }  
 }
 
 // --- AUTOMATISCHER LOGIN-CHECK ---
