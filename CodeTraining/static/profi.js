@@ -6,6 +6,7 @@ const UserLoginInScreen = document.getElementById("UserLogInScreen");
 const LogoutLink = document.getElementById("LogoutLink");
 const overlay = document.querySelector('.overlay');
 const UniversalAlert = document.getElementById("UniversalAlert");
+const AlertText = document.getElementById("AlertText");
 const AlertButton = document.getElementById("AlertButton");
 
 const gameState = {
@@ -224,12 +225,28 @@ document.getElementById('game-grid').addEventListener('click', async (e) => {
         } else if (result.event === "boost") {
             ShowCustomAlert("Du hast ein Koffe/Energy drink bekommen. Du hast jetzt " +
                 "+ 5 Züge.", "StyleMove");
+
+            UniversalAlert.style.width = "440px";
+            UniversalAlert.style.height = "120px";
+
         } else if (result.event === "bombe") {
             ShowCustomAlert("Du bist auf einer Bombe gestoßen. Jetzt hast du auf grund eines " 
                 + "streifschussen - 5 Züge weniger.", "StyleMove");
+
+            UniversalAlert.style.width = "480px";
+            UniversalAlert.style.height = "130px";
+
+            AlertText.style.maxWidth = "370px";
+
         } else if (result.event === "chaos") {
             ShowCustomAlert("Du bist auf einer Stadt getroffen, Da nicht sicher sein kannst ob " +
                  "die dir helfen oder nicht. Kannst du entweder 5 Züge +/- bekommen.", "StyleMove");
+
+            UniversalAlert.style.width = "525px";
+            UniversalAlert.style.height = "150px";
+
+            AlertText.style.maxWidth = "400px";
+
         }
     }
 });
