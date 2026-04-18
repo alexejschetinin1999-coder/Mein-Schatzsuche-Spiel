@@ -41,6 +41,7 @@ def index():
                                schulden=data['roblocks_schulden'],
                                bonus=data['bonus_points'])
     
+
     return render_template('profi.html', logged_in=False, level=1, stamina=15, schulden=0, bonus=0)
 
 @app.route('/Register', methods=['POST'])
@@ -208,6 +209,12 @@ def Move():
     cursor.execute(update_sql, [neu_stamina, level_up, echte_schulden, bonus_zuwachs, pos, username])
     conn.commit()
 
+    cursor.execute("SELECT bonus_points, roblocks_schulden FROM profi_nutzer WHERE username = %s", [username])
+    aktueller_stand = cursor.fetchone()
+    
+    finaler_bonus = aktueller_stand['bonus_points']
+    finale_schulden = aktueller_stand['roblocks_schulden']
+
     cursor.close()
     conn.close()
 
@@ -220,8 +227,8 @@ def Move():
         "new_quest": neue_goal_pos,
         "new_field": neue_tiles,
         "change": stamina_change,
-        "new_debt": echte_schulden,
-        "new_bonus": bonus_zuwachs
+        "new_debt": finale_schulden,
+        "new_bonus": finaler_bonus
     })
 
 @app.route('/CheckLogin')

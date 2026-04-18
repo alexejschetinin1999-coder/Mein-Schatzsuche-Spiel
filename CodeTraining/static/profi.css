@@ -184,6 +184,56 @@ p {
     padding: 5px;
 }
 
+.ConfirmMessage {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    display: none;
+    align-items: center;
+    transform: translateX(-50%);
+    z-index: 2000;
+    padding: 20px;
+    width: 450px;
+    height: 125px;
+}
+
+.ConfirmMessage.StyleMove {
+    background: #ff4081;
+    color: white;
+    box-shadow: 5px 5px 0px yellowgreen;
+    font-style: italic;
+    border: rgb(248, 77, 106) solid 10px;
+    border-radius: 5px 30px 5px 30px;
+}
+
+.ConfirmMessage.StyleCheat {
+    background: #020202;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    text-shadow: 0 0 5px #00ff00;
+    font-family: 'consolas', monospace;
+    border: lightgreen solid 10px;
+    border-radius: 10px;
+}
+
+#AlertText {
+    max-width: 300px;
+}
+
+#AlertButton {
+    background-color: rgb(225, 225, 103);
+    position: fixed;
+    right: 3%;
+    bottom: 10%;
+    font-family: 'lucida sans', 'lucida sans regular', Verdana, sans-serif;
+    font-size: large;
+    margin: 10px;
+    padding: 5px;
+    cursor: pointer;
+    border: blue double 5px;
+    border-radius: 2.5px;
+}
+
 /* Diese Klassen kommen in deine profi.css */
 .hidden {
     display: none !important;

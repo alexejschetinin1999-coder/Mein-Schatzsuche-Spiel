@@ -5,6 +5,9 @@ const BonusPoints = document.getElementById("BonusPoints");
 const UserLoginInScreen = document.getElementById("UserLogInScreen");
 const LogoutLink = document.getElementById("LogoutLink");
 const overlay = document.querySelector('.overlay');
+const UniversalAlert = document.getElementById("UniversalAlert");
+const AlertText = document.getElementById("AlertText");
+const AlertButton = document.getElementById("AlertButton");
 
 const gameState = {
     username: 'Gast',
@@ -47,6 +50,10 @@ overlay.addEventListener('click', (e) => {
 
 document.getElementById('RegisterLink').addEventListener('click', () => {
     overlay.style.display = "flex";
+});
+
+AlertButton.addEventListener("click", () => {
+    UniversalAlert.style.display = "none";
 });
 
 document.getElementById('JoinAccount').addEventListener('submit', async (e) => {
@@ -170,28 +177,29 @@ document.getElementById('game-grid').addEventListener('click', async (e) => {
     const diff = Math.abs(pos - gameState.currentPos);
 
     if (diff === 1 || diff === 10) {
-    
+
         if (diff === 1) {
             const oldRow = Math.floor(gameState.currentPos / 10);
             const newRow = Math.floor(pos / 10);
         
             if (oldRow !== newRow) {
-                alert("Du kannst nicht durch die Wand gehen!");
-                return; // Stopp!
+                ShowCustomAlert("Du kannst nicht durch die Wand gehen!", "StyleCheat");
+                return;
             }
         }
-
     } else {
-        alert("Du kannst nur ein Feld weit gehen!");
+        ShowCustomAlert("Du kannst nur ein Feld weit gehen!", "StyleCheat");
         return;
     }
 
     const result = await apiPost('/Move', { position: pos, map_id: gameState.level });
     
     if (result && result.status === 'success') {
-        // WICHTIG: Python schickt "NewStamina", JS muss es annehmen
+
+        console.log("Server Antwort:", result); // SCHRITT 1: Schau in die F12 Konsole!
+
         gameState.stamina = result.NewStamina;
-        gameState.bonus = result.new_bonus; 
+        gameState.bonus = result.new_bonus;
         gameState.currentPos = pos;
         
         // UI Update
@@ -215,13 +223,30 @@ document.getElementById('game-grid').addEventListener('click', async (e) => {
             alert(`Energie leer! Du hast ${result.new_debt} Schulden gemacht.`);
             location.reload(); // Reload um Energie & Level zu aktualisieren
         } else if (result.event === "boost") {
-            alert("Du hast ein Koffe/Energy drink bekommen. Du hast jetzt + 5 Züge.");
+            ShowCustomAlert("Du hast ein Koffe/Energy drink bekommen. Du hast jetzt " +
+                "+ 5 Züge.", "StyleMove");
+
+            UniversalAlert.style.width = "440px";
+            UniversalAlert.style.height = "120px";
+
         } else if (result.event === "bombe") {
-            alert("Du bist auf einer Bombe gestoßen. Jetzt hast du auf grund eines streif" + 
-                "schussen - 5 Züge weniger.");
+            ShowCustomAlert("Du bist auf einer Bombe gestoßen. Jetzt hast du auf grund eines " 
+                + "streifschussen - 5 Züge weniger.", "StyleMove");
+
+            UniversalAlert.style.width = "480px";
+            UniversalAlert.style.height = "130px";
+
+            AlertText.style.maxWidth = "370px";
+
         } else if (result.event === "chaos") {
-            alert("Du bist auf einer Stadt getroffen, Da nicht sicher sein kannst ob die dir" + 
-                "helfen oder nicht. Kannst du entweder 5 Züge +/- bekommen.");
+            ShowCustomAlert("Du bist auf einer Stadt getroffen, Da nicht sicher sein kannst ob " +
+                 "die dir helfen oder nicht. Kannst du entweder 5 Züge +/- bekommen.", "StyleMove");
+
+            UniversalAlert.style.width = "525px";
+            UniversalAlert.style.height = "150px";
+
+            AlertText.style.maxWidth = "400px";
+
         }
     }
 });
@@ -237,7 +262,7 @@ function updateUI() {
 
     if (BonusPoints) {
         BonusPoints.textContent = `Bonus: ${gameState.bonus}`;
-    }
+    }  
 }
 
 // --- AUTOMATISCHER LOGIN-CHECK ---
@@ -290,8 +315,7 @@ function showGamePage() {
     loginPage.classList.add('hidden');
 
     // Spiel zeigen
-    const gamePage = document.getElementById('page-game');
-    gamePage.classList.remove('hidden');
+    const gamePage = document.getElementById('page-game');    gamePage.classList.remove('hidden');
     gamePage.classList.add('active', 'visible');
 
     // Status-Elemente zeigen (Das ersetzt das manuelle .style.display = "flex")
@@ -299,4 +323,15 @@ function showGamePage() {
 
     updateUI();
     createGrid(100);
+}
+
+function ShowCustomAlert(Nachricht, StyleKlasse) {
+    const AlertBox = document.getElementById("UniversalAlert");
+    const AlertText = document.getElementById("AlertText");
+
+    AlertText.textContent = Nachricht;
+
+    AlertBox.className = "ConfirmMessage " + StyleKlasse;
+
+    AlertBox.style.display = "block";
 }
