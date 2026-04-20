@@ -7,7 +7,7 @@ import json
 app = Flask(__name__)
 app.secret_key = 'dein_ganz_geheimes_passwort'
 
-DB_CONFIG = {
+db_config = {
     "host": "localhost",
     "user": "root",
     "password": "",
@@ -15,7 +15,7 @@ DB_CONFIG = {
 }
 
 def get_db_connection():
-    return mysql.connector.connect(**DB_CONFIG)
+    return mysql.connector.connect(**db_config)
 
 # NEU: Die Hilfsfunktion, um doppelten Code zu vermeiden
 def get_user_game_data(username):
@@ -78,10 +78,10 @@ def register():
             "username": username,
             "level": 1,
             "stamina": 15,
-            "roblocks_schulden": 0,
+            "roblocksSchulden": 0,
             "bonus": 0,
-            "goal_pos": map_info['goal_pos'] if map_info else 99,
-            "special_tiles": map_info['special_tiles'] if map_info else '{"gold":[], "bombs":[], "chaos":[]}'
+            "goalPos": map_info['goal_pos'] if map_info else 99,
+            "specialTiles": map_info['special_tiles'] if map_info else '{"gold":[], "bombs":[], "chaos":[]}'
         })
     except mysql.connector.Error as err:
         print(err)
@@ -109,11 +109,11 @@ def login():
                 "username": user_data['username'],
                 "level": user_data['current_map'],
                 "stamina": user_data['stamina'],
-                "roblocks_schulden": user_data['roblocks_schulden'],
+                "roblocksSchulden": user_data['roblocks_schulden'],
                 "bonus": user_data['bonus_points'],
-                "last_pos": user_data['current_pos'],
-                "goal_pos": map_info['goal_pos'] if map_info else 0,
-                "special_tiles": map_info['special_tiles'] if map_info else '{"gold":[], "bombs":[], "chaos":[]}'
+                "lastPos": user_data['current_pos'],
+                "goalPos": map_info['goal_pos'] if map_info else 0,
+                "specialTiles": map_info['special_tiles'] if map_info else '{"gold":[], "bombs":[], "chaos":[]}'
             }
             cursor.close()
             conn.close()
@@ -124,7 +124,7 @@ def login():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/Move', methods=['POST'])
-def Move():
+def move():
     data = request.json
     pos = int(data.get('position'))
     map_id = int(data.get('map_id'))
@@ -220,19 +220,19 @@ def Move():
 
     return jsonify({
         "status": "success",
-        "NewStamina": neu_stamina,
+        "newStamina": neu_stamina,
         "event": event_name,
-        "new_level": level_up,
-        "new_beginn": neue_start_pos,
-        "new_quest": neue_goal_pos,
-        "new_field": neue_tiles,
+        "newLevel": level_up,
+        "newBeginn": neue_start_pos,
+        "newQuest": neue_goal_pos,
+        "newField": neue_tiles,
         "change": stamina_change,
-        "new_debt": finale_schulden,
-        "new_bonus": finaler_bonus
+        "newDebt": finale_schulden,
+        "newBonus": finaler_bonus
     })
 
 @app.route('/CheckLogin')
-def CheckLogin():
+def check_login():
     if 'user' in session:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
@@ -248,11 +248,11 @@ def CheckLogin():
                 "username": ergebnis['username'],
                 "level": ergebnis['current_map'],
                 "stamina": ergebnis['stamina'],
-                "roblocks_schulden": ergebnis['roblocks_schulden'],
+                "roblocksSchulden": ergebnis['roblocks_schulden'],
                 "bonus": ergebnis['bonus_points'],
-                "current_pos": ergebnis['current_pos'],
-                "goal_pos": map_info['goal_pos'] if map_info else 0,
-                "special_tiles": map_info['special_tiles'] if map_info else '{"gold":[], "bombs":[], "chaos":[]}'
+                "currentPos": ergebnis['current_pos'],
+                "goalPos": map_info['goal_pos'] if map_info else 0,
+                "specialTiles": map_info['special_tiles'] if map_info else '{"gold":[], "bombs":[], "chaos":[]}'
             }
             cursor.close()
             conn.close()
@@ -261,7 +261,7 @@ def CheckLogin():
     return jsonify({"logged_in": False})
 
 @app.route('/LogOut', methods=['POST'])
-def LogOut():
+def log_out():
     session.clear()
     return jsonify({"status": "success"})
 

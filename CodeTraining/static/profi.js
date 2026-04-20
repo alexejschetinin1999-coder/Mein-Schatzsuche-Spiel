@@ -1,20 +1,21 @@
-const CurrentMap = document.getElementById("CurrentMap");
-const PlayerLegend = document.getElementById("PlayerLegend");
-const SchuldenAnzeige = document.getElementById("SchuldenAnzeige");
-const BonusPoints = document.getElementById("BonusPoints");
-const UserLoginInScreen = document.getElementById("UserLogInScreen");
-const LogoutLink = document.getElementById("LogoutLink");
+const currentMap = document.getElementById("current-map");
+const playerLegend = document.getElementById("player-legend");
+const schuldenAnzeige = document.getElementById("schulden-anzeige");
+const bonusPoints = document.getElementById("bonus-points");
+const userLoginInScreen = document.getElementById("user-login-screen");
+const logoutLink = document.getElementById("logout-link");
+const registerLink = document.getElementById("register-link");
 const overlay = document.querySelector('.overlay');
-const UniversalAlert = document.getElementById("UniversalAlert");
-const AlertText = document.getElementById("AlertText");
-const AlertButton = document.getElementById("AlertButton");
+const universalAlert = document.getElementById("universal-alert");
+const alertText = document.getElementById("alert-text");
+const alertButton = document.getElementById("alert-button");
 
 const gameState = {
     username: 'Gast',
     level: 1,
     stamina: 15,
     currentPos: 0,
-    goal_pos: 0,
+    goalPos: 0,
     schulden: 0,
     bonus: 0,
     special: { gold: [], bombs: [], chaos: [] }
@@ -37,93 +38,90 @@ async function apiPost(url, payload) {
 // --- LOGIN & REGISTRIERUNG ---
 overlay.addEventListener('click', (e) => {
     const CardModal = document.querySelector('.card.modal');
-    const GoBack = document.getElementById("GoBack");
+    const GoBack = document.getElementById("go-back");
 
     if (e.target === CardModal) {
         e.stopPropagation();
     }
-    
+
     if (e.target === overlay || e.target === GoBack) {
         overlay.style.display = "none";
     }
 });
 
-document.getElementById('RegisterLink').addEventListener('click', () => {
+registerLink.addEventListener('click', () => {
     overlay.style.display = "flex";
 });
 
-AlertButton.addEventListener("click", () => {
-    UniversalAlert.style.display = "none";
+alertButton.addEventListener("click", () => {
+    universalAlert.style.display = "none";
 });
 
-document.getElementById('JoinAccount').addEventListener('submit', async (e) => {
+document.getElementById('join-account').addEventListener('submit', async (e) => {
     e.preventDefault();
-
-    const username = document.getElementById('CreateUser').value;
-    const password = document.getElementById('CreateLogin').value;
-
-    const data = await apiPost('/Register', {
-        username: username,
-        password: password
-    });
+    
+    const username = document.getElementById('create-user').value;
+    const password = document.getElementById('create-login').value;
+    const data = await apiPost('/Register', { username: username, password: password });
 
     if (data && data.status === 'success') {
         alert("Deine Account wurde erfolgreich erstellt.");
-
         gameState.username = data.username;
         gameState.level = data.level;
         gameState.stamina = data.stamina;
-        gameState.goal_pos = data.goal_pos; 
+        gameState.goalPos = data.goalPos; // Korrigiert
         gameState.currentPos = 0;
         gameState.schulden = 0;
         gameState.bonus = data.bonus;
-
-        if (data.special_tiles) {
-            gameState.special = JSON.parse(data.special_tiles)
+        
+        if (data.specialTiles) { // Korrigiert
+            gameState.special = JSON.parse(data.specialTiles); // Korrigiert
         }
 
         overlay.style.display = "none";
-
+        
         showGamePage();
-
-        CurrentMap.style.display = "flex";
-        PlayerLegend.style.display = "flex";
-        SchuldenAnzeige.style.display = "flex";
-        BonusPoints.style.display = "flex";
-        LogoutLink.style.display = "flex"; 
+        
+        currentMap.style.display = "flex";
+        playerLegend.style.display = "flex";
+        schuldenAnzeige.style.display = "flex";
+        bonusPoints.style.display = "flex";
+        logoutLink.style.display = "flex";
     } else {
         alert("Fehler: " + (data.message || "Name schon vergeben?"));
     }
 });
 
-document.getElementById('Formular').addEventListener('submit', async (e) => {
+document.getElementById('formular').addEventListener('submit', async (e) => {
     e.preventDefault();
+    
     const payload = {
-        username: document.getElementById('UserName').value,
-        password: document.getElementById('UserLogin').value
+        username: document.getElementById('user-name').value,
+        password: document.getElementById('user-login').value
     };
-
+    
     const data = await apiPost('/Login', payload);
+
     if (data && data.status === 'success') {
         gameState.username = data.username;
         gameState.level = data.level;
         gameState.stamina = data.stamina;
-        gameState.schulden = data.roblocks_schulden;
+        gameState.schulden = data.roblocksSchulden; // Korrigiert
         gameState.bonus = data.bonus;
-        gameState.currentPos = data.last_pos || 0;
-        gameState.goal_pos = data.goal_pos;
-
-        if (data.special_tiles) {
-            gameState.special = JSON.parse(data.special_tiles);
+        gameState.currentPos = data.lastPos || 0;   // Korrigiert
+        gameState.goalPos = data.goalPos;           // Korrigiert
+        
+        if (data.specialTiles) { // Korrigiert
+            gameState.special = JSON.parse(data.specialTiles); // Korrigiert
         }
         
-        showGamePage(); // Helferfunktion zum Seitenwechsel
-
-        CurrentMap.style.display = "flex";
-        PlayerLegend.style.display = "flex";
-        SchuldenAnzeige.style.display = "flex";
-        BonusPoints.style.display = "flex";
-        LogoutLink.style.display = "flex"; 
+        showGamePage();
+        
+        currentMap.style.display = "flex";
+        playerLegend.style.display = "flex";
+        schuldenAnzeige.style.display = "flex";
+        bonusPoints.style.display = "flex";
+        logoutLink.style.display = "flex";
     } else {
         alert("Login fehlgeschlagen!");
     }
@@ -132,47 +130,46 @@ document.getElementById('Formular').addEventListener('submit', async (e) => {
 // --- SPIELFELD GENERIEREN ---
 function createGrid(count) {
     const grid = document.getElementById('game-grid');
-    grid.innerHTML = ''; 
-
+    grid.innerHTML = '';
     for (let i = 0; i < count; i++) {
         const tile = document.createElement('div');
-        tile.className = 'tileContainer';
+        tile.className = 'tile-container';
         tile.dataset.index = i;
-
+        
         tile.innerHTML = `
-            <div class="tileGelenk">
-                <div class="tileFront">${i}</div>
-                <div class="tileBack">?</div>
+            <div class="tile-gelenk">
+                <div class="tile-front">${i}</div>
+                <div class="tile-back">?</div>
             </div>
         `;
-
+        
         if (i === gameState.currentPos) {
-            tile.querySelector('.tileGelenk').classList.add('is-flipped');
-            const back = tile.querySelector('.tileBack');
+            tile.querySelector('.tile-gelenk').classList.add('is-flipped');
+            const back = tile.querySelector('.tile-back');
             back.textContent = 'START';
             back.style.background = 'red';
             back.style.color = 'white';
         }
-
-        if (i === gameState.goal_pos) {
-            tile.querySelector('.tileGelenk').classList.add('is-flipped');
-            const back = tile.querySelector('.tileBack');
+        
+        if (i === gameState.goalPos) {
+            tile.querySelector('.tile-gelenk').classList.add('is-flipped');
+            const back = tile.querySelector('.tile-back');
             back.textContent = 'ZIEL';
             back.style.background = 'yellow';
         }
- 
+        
         grid.appendChild(tile);
     }
 }
 
 // --- GAME LOGIK (KLICK) ---
 document.getElementById('game-grid').addEventListener('click', async (e) => {
-    const tile = e.target.closest('.tileContainer');
-
+    const tile = e.target.closest('.tile-container');
     if (!tile) return;
+
     const pos = parseInt(tile.dataset.index);
 
-    if (tile.querySelector('.is-flipped') && pos !== gameState.goal_pos) return;
+    if (tile.querySelector('.is-flipped') && pos !== gameState.goalPos) return;
 
     const diff = Math.abs(pos - gameState.currentPos);
 
@@ -181,88 +178,80 @@ document.getElementById('game-grid').addEventListener('click', async (e) => {
         if (diff === 1) {
             const oldRow = Math.floor(gameState.currentPos / 10);
             const newRow = Math.floor(pos / 10);
-        
+
             if (oldRow !== newRow) {
-                ShowCustomAlert("Du kannst nicht durch die Wand gehen!", "StyleCheat");
+                showCustomAlert("Du kannst nicht durch die Wand gehen!", "style-cheat");
                 return;
             }
         }
     } else {
-        ShowCustomAlert("Du kannst nur ein Feld weit gehen!", "StyleCheat");
+        showCustomAlert("Du kannst nur ein Feld weit gehen!", "style-cheat");
         return;
     }
 
     const result = await apiPost('/Move', { position: pos, map_id: gameState.level });
-    
+
     if (result && result.status === 'success') {
-
-        console.log("Server Antwort:", result); // SCHRITT 1: Schau in die F12 Konsole!
-
-        gameState.stamina = result.NewStamina;
-        gameState.bonus = result.new_bonus;
+        console.log("Server Antwort:", result);
+        gameState.stamina = result.newStamina; // Korrigiert
+        gameState.bonus = result.newBonus;     // Korrigiert
         gameState.currentPos = pos;
-        
-        // UI Update
-        tile.querySelector('.tileGelenk').classList.add('is-flipped');
+
+        tile.querySelector('.tile-gelenk').classList.add('is-flipped'); // Korrigiert (Bindestrich)
         updateUI();
 
-        // Event-Handling
         if (result.event === "goal") {
-            alert("Ziel erreicht! Willkommen in Level " + result.new_level);
-            
-            gameState.level = result.new_level;
-            gameState.currentPos = result.new_beginn;
-            gameState.goal_pos = result.new_quest;
+            alert("Ziel erreicht! Willkommen in Level " + result.newLevel); // Korrigiert
 
-            let NewSpecialTiles = JSON.parse(result.new_field);
+            gameState.level = result.newLevel;     // Korrigiert
+            gameState.currentPos = result.newBeginn; // Korrigiert
+            gameState.goalPos = result.newQuest;     // Korrigiert
+
+            let NewSpecialTiles = JSON.parse(result.newField); // Korrigiert
+
             gameState.special = NewSpecialTiles;
-
             updateUI();
             createGrid(100);
         } else if (result.event === "SchuldenKonto") {
-            alert(`Energie leer! Du hast ${result.new_debt} Schulden gemacht.`);
-            location.reload(); // Reload um Energie & Level zu aktualisieren
-        } else if (result.event === "boost") {
-            ShowCustomAlert("Du hast ein Koffe/Energy drink bekommen. Du hast jetzt " +
-                "+ 5 Züge.", "StyleMove");
 
-            UniversalAlert.style.width = "440px";
-            UniversalAlert.style.height = "120px";
+            alert(`Energie leer! Du hast ${result.newDebt} Schulden gemacht.`); // Korrigiert
+            location.reload();
+
+        } else if (result.event === "boost") {
+            showCustomAlert("Du hast ein Koffe/Energy drink bekommen. Du hast jetzt + 5 Züge.", "style-move");
+
+            universalAlert.style.width = "440px";
+            universalAlert.style.height = "120px";
 
         } else if (result.event === "bombe") {
-            ShowCustomAlert("Du bist auf einer Bombe gestoßen. Jetzt hast du auf grund eines " 
-                + "streifschussen - 5 Züge weniger.", "StyleMove");
+            showCustomAlert("Du bist auf einer Bombe gestoßen. Jetzt hast du auf grund eines streifschussen - 5 Züge weniger.", "style-move");
 
-            UniversalAlert.style.width = "480px";
-            UniversalAlert.style.height = "130px";
-
-            AlertText.style.maxWidth = "370px";
+            universalAlert.style.width = "480px";
+            universalAlert.style.height = "130px";
+            alertText.style.maxWidth = "370px";
 
         } else if (result.event === "chaos") {
-            ShowCustomAlert("Du bist auf einer Stadt getroffen, Da nicht sicher sein kannst ob " +
-                 "die dir helfen oder nicht. Kannst du entweder 5 Züge +/- bekommen.", "StyleMove");
+            showCustomAlert("Du bist auf einer Stadt getroffen, Da nicht sicher sein kannst ob die dir helfen oder nicht. Kannst du entweder 5 Züge +/- bekommen.", "style-move");
 
-            UniversalAlert.style.width = "525px";
-            UniversalAlert.style.height = "150px";
-
-            AlertText.style.maxWidth = "400px";
-
+            universalAlert.style.width = "525px";
+            universalAlert.style.height = "150px";
+            alertText.style.maxWidth = "400px";
         }
     }
 });
 
 function updateUI() {
-    document.getElementById('PlayerLegend').textContent = `Energie: ${gameState.stamina}`;
-    document.getElementById('CurrentMap').textContent = `Map: ${gameState.level}`;
-    document.getElementById('UserLoginInScreen').textContent = gameState.username;
-    
-    if (SchuldenAnzeige) {
-        SchuldenAnzeige.textContent = `Schulden: ${gameState.schulden}`;
+    document.getElementById('player-legend').textContent = `Energie: ${gameState.stamina}`;
+    document.getElementById('current-map').textContent = `Map: ${gameState.level}`;
+    document.getElementById('user-login-screen').textContent = gameState.username;
+
+    if (schuldenAnzeige) {
+        schuldenAnzeige.textContent = `Schulden: ${gameState.schulden}`;
     }
 
-    if (BonusPoints) {
-        BonusPoints.textContent = `Bonus: ${gameState.bonus}`;
-    }  
+    if (bonusPoints) {
+        bonusPoints.textContent = `Bonus: ${gameState.bonus}`;
+    }
 }
 
 // --- AUTOMATISCHER LOGIN-CHECK ---
@@ -274,64 +263,57 @@ window.addEventListener("load", async () => {
         gameState.username = data.username;
         gameState.level = data.level;
         gameState.stamina = data.stamina;
-        // Hier müsste das Backend eigentlich auch last_pos mitschicken!
-        gameState.currentPos = data.current_pos || 0; 
-        gameState.schulden = data.roblocks_schulden || 0;
+        gameState.currentPos = data.currentPos || 0;      // Korrigiert
+        gameState.schulden = data.roblocksSchulden || 0; // Korrigiert
         gameState.bonus = data.bonus;
-        gameState.goal_pos = data.goal_pos;
+        gameState.goalPos = data.goalPos;                  // Korrigiert
 
-        if (data.special_tiles) {
-            gameState.special = JSON.parse(data.special_tiles);
+        if (data.specialTiles) { // Korrigiert
+            gameState.special = JSON.parse(data.specialTiles); // Korrigiert
         }
 
         showGamePage();
 
-        CurrentMap.style.display = "flex";
-        PlayerLegend.style.display = "flex";
-        SchuldenAnzeige.style.display = "flex";
-        BonusPoints.style.display = "flex";
-        LogoutLink.style.display = "flex";
+        currentMap.style.display = "flex";
+        playerLegend.style.display = "flex";
+        schuldenAnzeige.style.display = "flex";
+        bonusPoints.style.display = "flex";
+        logoutLink.style.display = "flex";
     }
 });
 
-// Logout-Funktion hinzufügen
-document.getElementById('LogoutLink').addEventListener('click', async () => {
-    const AbmeldungsBestätigung = confirm("Willst du wirklich raus gehen?");
-        
-    if (AbmeldungsBestätigung) {
+logoutLink.addEventListener('click', async () => {
+    const abmeldungsBestätigung = confirm("Willst du wirklich raus gehen?");
+
+    if (abmeldungsBestätigung) {
         const res = await fetch('/LogOut', { method: 'POST' });
         const data = await res.json();
 
         if (data.status === 'success') {
-            location.reload(); 
+            location.reload();
         }
     }
 });
 
 function showGamePage() {
-    // Login verstecken
     const loginPage = document.getElementById('page-login');
     loginPage.classList.remove('active', 'visible');
     loginPage.classList.add('hidden');
 
-    // Spiel zeigen
-    const gamePage = document.getElementById('page-game');    gamePage.classList.remove('hidden');
+    const gamePage = document.getElementById('page-game');
+    gamePage.classList.remove('hidden');
     gamePage.classList.add('active', 'visible');
-
-    // Status-Elemente zeigen (Das ersetzt das manuelle .style.display = "flex")
     document.getElementById('status-bar').classList.remove('hidden');
 
     updateUI();
     createGrid(100);
 }
 
-function ShowCustomAlert(Nachricht, StyleKlasse) {
-    const AlertBox = document.getElementById("UniversalAlert");
-    const AlertText = document.getElementById("AlertText");
+function showCustomAlert(Nachricht, styleKlasse) {
+    const alertBox = document.getElementById("universal-alert");
+    const alertText = document.getElementById("alert-text");
 
-    AlertText.textContent = Nachricht;
-
-    AlertBox.className = "ConfirmMessage " + StyleKlasse;
-
-    AlertBox.style.display = "block";
+    alertText.textContent = Nachricht;
+    alertBox.className = "confirm-message " + styleKlasse;
+    alertBox.style.display = "block";
 }

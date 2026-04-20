@@ -11,24 +11,24 @@
     <header class="game-header">
         <h1>Schatzkarten Quiz</h1>
         <div id="status-bar" class="{% if not logged_in %}hidden{% endif %}">
-            <span id="CurrentMap">Map: {{ level }}</span>
-            <span id="PlayerLegend">Energie: {{ stamina }}</span>
-            <span id="SchuldenAnzeige"> Schulden: {{ schulden }} </span>
-            <span id="BonusPoints">Bonus: {{ bonus }} </span>
-            <span id="UserLoginInScreen">{{ username if username else 'Gast' }}</span>
-            <button id="LogoutLink" class="btn-small">Logout</button>
+            <span id="current-map">Map: {{ level }}</span>
+            <span id="player-legend">Energie: {{ stamina }}</span>
+            <span id="schulden-anzeige"> Schulden: {{ schulden }}</span>
+            <span id="bonus-points">Bonus: {{ bonus }}</span>
+            <span id="user-login-screen">{{ username if username else 'Gast' }}</span>
+            <button id="logout-link" class="btn-small">Logout</button>
         </div>
     </header>
 
     <main class="container">
         <section id="page-login" class="page {% if not logged_in %}active visible{% else %}hidden{% endif %}">            <div class="card shadow">
                 <p>Willkommen! Erreiche das Ziel, bevor deine Energie verbraucht ist.</p>
-                <form id="Formular" class="vertical-form">
-                    <input type="text" id="UserName" placeholder="Benutzername" required>
-                    <input type="password" id="UserLogin" placeholder="Passwort" required>
+                <form id="formular" class="vertical-form">
+                    <input type="text" id="user-name" placeholder="Benutzername" required>
+                    <input type="password" id="user-login" placeholder="Passwort" required>
                     <button type="submit" class="btn-primary">Spiel starten</button>
                 </form>
-                <p class="small-text">Noch kein Account? <a href="#" id="RegisterLink">Registrieren</a></p>
+                <p class="small-text">Noch kein Account? <a href="#" id="register-link">Registrieren</a></p>
             </div>
         </section>
 
@@ -40,20 +40,34 @@
     <div class="overlay" id="register-overlay">
         <div class="card modal">
             <h3>Neuen Account erstellen</h3>
-            <form id="JoinAccount" class="vertical-form">
-                <input type="text" id="CreateUser" placeholder="Wunschname" required>
-                <input type="password" id="CreateLogin" placeholder="Passwort" required>
+            <form id="join-account" class="vertical-form">
+                <input type="text" id="create-user" placeholder="Wunschname" required>
+                <input type="password" id="create-login" placeholder="Passwort" required>
                 <div class="button-group">
-                    <button type="button" class="btn-secondary" id="GoBack">Abbrechen</button>
+                    <button type="button" class="btn-secondary" id="go-back">Abbrechen</button>
                     <button type="submit" class="btn-primary">Erstellen</button>
                 </div>
             </form>
         </div>
     </div>
     
-    <div id="UniversalAlert" class="ConfirmMessage">
-        <p id="AlertText"></p>
-        <button id="AlertButton">OK</button>
+    <div id="universal-alert" class="confirm-message">
+        <p id="alert-text"></p>
+        <button id="alert-button">OK</button>
+    </div>
+
+    <div class="leader-board-container">
+        <h3>Willkommen zu Deinem Entergebnis.</h3>
+
+        <div class="score-row">
+            <span class="user-preview-name"> {{ username }} </span>
+            <span class="user-preview-map"> {{ level }} von 10. </span>
+
+            <div class="bar-container">
+                <div class="bar-fill-schulden"></div> <span class="bar-value"></span>
+                <div class="bar-fill-bonus"></div> <span class="bar-value"></span>
+            </div>  
+        </div>
     </div>
     
     <script src="{{ url_for('static', filename='profi.js') }}"></script>

@@ -67,13 +67,13 @@ p {
     margin-bottom: 0px;
 }
 
-#RegisterLink {
+#register-link {
     margin-left: 10px;
     margin-top: 15px;
     color: yellow;
 }
 
-#RegisterLink:hover {
+#register-link:hover {
     color: yellowgreen;
 }
 
@@ -89,12 +89,12 @@ p {
     border-radius: 8px;
 }
 
-.tileContainer {
+.tile-container {
     perspective: 1000px;
     cursor: pointer;
 }
 
-.tileGelenk {
+.tile-gelenk {
     width: 100%;
     height: 100%;
     position: relative;
@@ -102,9 +102,9 @@ p {
     transform-style: preserve-3d;
 }
 
-.tileGelenk.is-flipped { transform: rotateY(180deg); }
+.tile-gelenk.is-flipped { transform: rotateY(180deg); }
 
-.tileFront, .tileBack {
+.tile-front, .tile-back {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -117,8 +117,8 @@ p {
     font-weight: bold;
 }
 
-.tileFront { background: var(--tile-front); color: white; }
-.tileBack { background: var(--tile-back); color: black; transform: rotateY(180deg); }
+.tile-front { background: var(--tile-front); color: white; }
+.tile-back { background: var(--tile-back); color: black; transform: rotateY(180deg); }
 
 /* BUTTONS */
 .btn-primary {
@@ -180,11 +180,11 @@ p {
     margin-top: 10px;
 }
 
-#GoBack {
+#go-back {
     padding: 5px;
 }
 
-.ConfirmMessage {
+.confirm-message {
     position: fixed;
     top: 30%;
     left: 50%;
@@ -197,7 +197,7 @@ p {
     height: 125px;
 }
 
-.ConfirmMessage.StyleMove {
+.confirm-message.style-move {
     background: #ff4081;
     color: white;
     box-shadow: 5px 5px 0px yellowgreen;
@@ -206,7 +206,7 @@ p {
     border-radius: 5px 30px 5px 30px;
 }
 
-.ConfirmMessage.StyleCheat {
+.confirm-message.style-cheat {
     background: #020202;
     color: #00ff00;
     border: 1px solid #00ff00;
@@ -216,11 +216,11 @@ p {
     border-radius: 10px;
 }
 
-#AlertText {
+#alert-text {
     max-width: 300px;
 }
 
-#AlertButton {
+#alert-button {
     background-color: rgb(225, 225, 103);
     position: fixed;
     right: 3%;
@@ -232,6 +232,10 @@ p {
     cursor: pointer;
     border: blue double 5px;
     border-radius: 2.5px;
+}
+
+.leader-board-container {
+    display: none;
 }
 
 .hidden {
