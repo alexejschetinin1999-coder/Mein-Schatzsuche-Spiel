@@ -236,7 +236,7 @@ document.getElementById('game-grid').addEventListener('click', async (e) => {
             universalAlert.style.width = "525px";
             universalAlert.style.height = "150px";
             alertText.style.maxWidth = "400px";
-        }
+        } 
     }
 });
 

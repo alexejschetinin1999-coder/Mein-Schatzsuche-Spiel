@@ -60,10 +60,10 @@ def register():
         cursor = conn.cursor(dictionary=True)
         query = """
             INSERT INTO profi_nutzer 
-            (username, password, stamina, current_pos, current_map, roblocks_schulden, last_position, bonus_points) 
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            (username, password, stamina, current_pos, current_map, roblocks_schulden, last_position, bonus_points, game_state) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-        cursor.execute(query, (username, hashed_pw, 15, 0, 1, 0, "0", 0))
+        cursor.execute(query, (username, hashed_pw, 15, 0, 1, 0, "0", 0, 'PLAYING'))
         conn.commit()
 
         cursor.execute("SELECT goal_pos, special_tiles FROM profi_maps WHERE map_id = 1")
@@ -108,6 +108,7 @@ def login():
                 "status": "success",
                 "username": user_data['username'],
                 "level": user_data['current_map'],
+                "gameState": user_data['game_state'],
                 "stamina": user_data['stamina'],
                 "roblocksSchulden": user_data['roblocks_schulden'],
                 "bonus": user_data['bonus_points'],
@@ -152,6 +153,7 @@ def move():
     neue_start_pos = pos
     neue_goal_pos = map_daten['goal_pos']
     neue_tiles = map_daten['special_tiles']
+    still_playing = user_daten['game_state']
 
     # 1. Zuerst prüfen: Ist er auf dem Ziel gelandet? (Damit er den Bonus kriegt!)
     if pos == map_daten['goal_pos']:
@@ -199,10 +201,15 @@ def move():
     if event_name not in ["goal", "SchuldenKonto"]:
         neu_stamina = user_daten['stamina'] + stamina_change
 
+    if level_up > 10:
+        event_name = "game_break"
+        still_playing = 'FINISHED'
+        level_up = 10
+
     update_sql = """
         UPDATE profi_nutzer 
         SET stamina = %s, current_map = %s, roblocks_schulden = roblocks_schulden + %s, 
-        bonus_points = bonus_points + %s, current_pos = %s
+        bonus_points = bonus_points + %s, current_pos = %s, game_state = %s
         WHERE username = %s
     """
 
@@ -223,6 +230,7 @@ def move():
         "newStamina": neu_stamina,
         "event": event_name,
         "newLevel": level_up,
+        "gameState": still_playing,
         "newBeginn": neue_start_pos,
         "newQuest": neue_goal_pos,
         "newField": neue_tiles,
@@ -248,6 +256,7 @@ def check_login():
                 "username": ergebnis['username'],
                 "level": ergebnis['current_map'],
                 "stamina": ergebnis['stamina'],
+                "gameState": ergebnis['game_state'],
                 "roblocksSchulden": ergebnis['roblocks_schulden'],
                 "bonus": ergebnis['bonus_points'],
                 "currentPos": ergebnis['current_pos'],

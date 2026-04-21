@@ -64,8 +64,18 @@
             <span class="user-preview-map"> {{ level }} von 10. </span>
 
             <div class="bar-container">
-                <div class="bar-fill-schulden"></div> <span class="bar-value"></span>
-                <div class="bar-fill-bonus"></div> <span class="bar-value"></span>
+                <div 
+                    id="stamina-bar" 
+                    class="progress-bar" 
+                    role="progressbar"
+                    aria-valuenow=""
+                    aria-voluemax=""
+                    aria-valuemin=""
+                    aria-label=""
+                >
+                <div id="stamina-fill" class="progress-fill"></div>
+                <span id="stamina-text" class="progress-text"></span>
+                </div>
             </div>  
         </div>
     </div>
