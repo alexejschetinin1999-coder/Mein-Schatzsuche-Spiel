@@ -5,10 +5,18 @@ const bonusPoints = document.getElementById("bonus-points");
 const userLoginInScreen = document.getElementById("user-login-screen");
 const logoutLink = document.getElementById("logout-link");
 const registerLink = document.getElementById("register-link");
+const gameGrid = document.getElementById('game-grid');
+const loginPage = document.getElementById('page-login');
+const formular = document.getElementById("formular");
+const gamePage = document.getElementById('page-game');
 const overlay = document.querySelector('.overlay');
+const joinAccount = document.getElementById("join-account");
 const universalAlert = document.getElementById("universal-alert");
 const alertText = document.getElementById("alert-text");
 const alertButton = document.getElementById("alert-button");
+const leaderBoardContainer = document.querySelector(".leader-board-container");
+const userPreviewName = document.querySelector(".user-preview-name");
+const userPreviewMap = document.querySelector(".user-preview-map");
 
 const gameState = {
     username: 'Gast',
@@ -57,7 +65,7 @@ alertButton.addEventListener("click", () => {
     universalAlert.style.display = "none";
 });
 
-document.getElementById('join-account').addEventListener('submit', async (e) => {
+joinAccount.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const username = document.getElementById('create-user').value;
@@ -92,7 +100,7 @@ document.getElementById('join-account').addEventListener('submit', async (e) => 
     }
 });
 
-document.getElementById('formular').addEventListener('submit', async (e) => {
+formular.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const payload = {
@@ -163,7 +171,7 @@ function createGrid(count) {
 }
 
 // --- GAME LOGIK (KLICK) ---
-document.getElementById('game-grid').addEventListener('click', async (e) => {
+gameGrid.addEventListener('click', async (e) => {
     const tile = e.target.closest('.tile-container');
     if (!tile) return;
 
@@ -192,6 +200,11 @@ document.getElementById('game-grid').addEventListener('click', async (e) => {
     const result = await apiPost('/Move', { position: pos, map_id: gameState.level });
 
     if (result && result.status === 'success') {
+        if (result.gameState === 'FINISHED') {
+            showEndScreen(result);
+            return;
+        }
+
         console.log("Server Antwort:", result);
         gameState.stamina = result.newStamina; // Korrigiert
         gameState.bonus = result.newBonus;     // Korrigiert
@@ -296,11 +309,9 @@ logoutLink.addEventListener('click', async () => {
 });
 
 function showGamePage() {
-    const loginPage = document.getElementById('page-login');
     loginPage.classList.remove('active', 'visible');
     loginPage.classList.add('hidden');
 
-    const gamePage = document.getElementById('page-game');
     gamePage.classList.remove('hidden');
     gamePage.classList.add('active', 'visible');
     document.getElementById('status-bar').classList.remove('hidden');
@@ -310,10 +321,15 @@ function showGamePage() {
 }
 
 function showCustomAlert(Nachricht, styleKlasse) {
-    const alertBox = document.getElementById("universal-alert");
-    const alertText = document.getElementById("alert-text");
-
     alertText.textContent = Nachricht;
-    alertBox.className = "confirm-message " + styleKlasse;
-    alertBox.style.display = "block";
+    universalAlert.className = "confirm-message " + styleKlasse;
+    universalAlert.style.display = "block";
+}
+
+async function showEndScreen(result) {
+    gamePage.classList.remove("active", "visible");
+    gamePage.classList.add("hidden");
+
+    leaderBoardContainer.classList.remove("hidden");
+    leaderBoardContainer.classList.add("active", "visible");
 }

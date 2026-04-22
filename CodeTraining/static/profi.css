@@ -234,10 +234,6 @@ p {
     border-radius: 2.5px;
 }
 
-.leader-board-container {
-    display: none;
-}
-
 .hidden {
     display: none !important;
 }

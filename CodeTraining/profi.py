@@ -213,7 +213,7 @@ def move():
         WHERE username = %s
     """
 
-    cursor.execute(update_sql, [neu_stamina, level_up, echte_schulden, bonus_zuwachs, pos, username])
+    cursor.execute(update_sql, [neu_stamina, level_up, echte_schulden, bonus_zuwachs, pos, still_playing, username])
     conn.commit()
 
     cursor.execute("SELECT bonus_points, roblocks_schulden FROM profi_nutzer WHERE username = %s", [username])
