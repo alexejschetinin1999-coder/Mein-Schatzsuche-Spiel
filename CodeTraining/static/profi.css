@@ -234,6 +234,34 @@ p {
     border-radius: 2.5px;
 }
 
+.leader-board-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    height: 400px;
+    width: 800px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: bisque;
+    color: magenta;
+    border: 10px double yellowgreen;
+    border-radius: 5px;
+}
+
+#leader-header {
+    margin-bottom: 20px;
+}
+
+.user-preview-name {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: medium;
+    font-weight: 500;
+}
+
 .hidden {
     display: none !important;
 }

@@ -18,7 +18,7 @@ const leaderBoardContainer = document.querySelector(".leader-board-container");
 const userPreviewName = document.querySelector(".user-preview-name");
 const userPreviewMap = document.querySelector(".user-preview-map");
 
-const gameState = {
+const userDetails = {
     username: 'Gast',
     level: 1,
     stamina: 15,
@@ -26,6 +26,7 @@ const gameState = {
     goalPos: 0,
     schulden: 0,
     bonus: 0,
+    gameState: 'PLAYING',
     special: { gold: [], bombs: [], chaos: [] }
 };
 
@@ -74,16 +75,16 @@ joinAccount.addEventListener('submit', async (e) => {
 
     if (data && data.status === 'success') {
         alert("Deine Account wurde erfolgreich erstellt.");
-        gameState.username = data.username;
-        gameState.level = data.level;
-        gameState.stamina = data.stamina;
-        gameState.goalPos = data.goalPos; // Korrigiert
-        gameState.currentPos = 0;
-        gameState.schulden = 0;
-        gameState.bonus = data.bonus;
+        userDetails.username = data.username;
+        userDetails.level = data.level;
+        userDetails.stamina = data.stamina;
+        userDetails.goalPos = data.goalPos; 
+        userDetails.currentPos = 0;
+        userDetails.schulden = 0;
+        userDetails.bonus = data.bonus;
         
-        if (data.specialTiles) { // Korrigiert
-            gameState.special = JSON.parse(data.specialTiles); // Korrigiert
+        if (data.specialTiles) {
+            userDetails.special = JSON.parse(data.specialTiles); 
         }
 
         overlay.style.display = "none";
@@ -111,25 +112,30 @@ formular.addEventListener('submit', async (e) => {
     const data = await apiPost('/Login', payload);
 
     if (data && data.status === 'success') {
-        gameState.username = data.username;
-        gameState.level = data.level;
-        gameState.stamina = data.stamina;
-        gameState.schulden = data.roblocksSchulden; // Korrigiert
-        gameState.bonus = data.bonus;
-        gameState.currentPos = data.lastPos || 0;   // Korrigiert
-        gameState.goalPos = data.goalPos;           // Korrigiert
+        userDetails.username = data.username;
+        userDetails.level = data.level;
+        userDetails.stamina = data.stamina;
+        userDetails.schulden = data.roblocksSchulden; 
+        userDetails.bonus = data.bonus;
+        userDetails.currentPos = data.lastPos || 0; 
+        userDetails.goalPos = data.goalPos;
+        userDetails.gameState = data.gameState;       
         
-        if (data.specialTiles) { // Korrigiert
-            gameState.special = JSON.parse(data.specialTiles); // Korrigiert
+        if (data.specialTiles) { 
+            userDetails.special = JSON.parse(data.specialTiles);
         }
         
-        showGamePage();
+        if (data.gameState === 'FINISHED') {
+            showEndScreen(data);
+        } else {
+            showGamePage();
         
-        currentMap.style.display = "flex";
-        playerLegend.style.display = "flex";
-        schuldenAnzeige.style.display = "flex";
-        bonusPoints.style.display = "flex";
-        logoutLink.style.display = "flex";
+            currentMap.style.display = "flex";
+            playerLegend.style.display = "flex";
+            schuldenAnzeige.style.display = "flex";
+            bonusPoints.style.display = "flex";
+            logoutLink.style.display = "flex";
+        }
     } else {
         alert("Login fehlgeschlagen!");
     }
@@ -151,7 +157,7 @@ function createGrid(count) {
             </div>
         `;
         
-        if (i === gameState.currentPos) {
+        if (i === userDetails.currentPos) {
             tile.querySelector('.tile-gelenk').classList.add('is-flipped');
             const back = tile.querySelector('.tile-back');
             back.textContent = 'START';
@@ -159,7 +165,7 @@ function createGrid(count) {
             back.style.color = 'white';
         }
         
-        if (i === gameState.goalPos) {
+        if (i === userDetails.goalPos) {
             tile.querySelector('.tile-gelenk').classList.add('is-flipped');
             const back = tile.querySelector('.tile-back');
             back.textContent = 'ZIEL';
@@ -177,14 +183,14 @@ gameGrid.addEventListener('click', async (e) => {
 
     const pos = parseInt(tile.dataset.index);
 
-    if (tile.querySelector('.is-flipped') && pos !== gameState.goalPos) return;
+    if (tile.querySelector('.is-flipped') && pos !== userDetails.goalPos) return;
 
-    const diff = Math.abs(pos - gameState.currentPos);
+    const diff = Math.abs(pos - userDetails.currentPos);
 
     if (diff === 1 || diff === 10) {
 
         if (diff === 1) {
-            const oldRow = Math.floor(gameState.currentPos / 10);
+            const oldRow = Math.floor(userDetails.currentPos / 10);
             const newRow = Math.floor(pos / 10);
 
             if (oldRow !== newRow) {
@@ -197,37 +203,37 @@ gameGrid.addEventListener('click', async (e) => {
         return;
     }
 
-    const result = await apiPost('/Move', { position: pos, map_id: gameState.level });
+    const result = await apiPost('/Move', { position: pos, map_id: userDetails.level });
 
     if (result && result.status === 'success') {
-        if (result.gameState === 'FINISHED') {
+        if (result.userDetails === 'FINISHED') {
             showEndScreen(result);
             return;
         }
 
         console.log("Server Antwort:", result);
-        gameState.stamina = result.newStamina; // Korrigiert
-        gameState.bonus = result.newBonus;     // Korrigiert
-        gameState.currentPos = pos;
+        userDetails.stamina = result.newStamina; 
+        userDetails.bonus = result.newBonus;     
+        userDetails.currentPos = pos;
 
-        tile.querySelector('.tile-gelenk').classList.add('is-flipped'); // Korrigiert (Bindestrich)
+        tile.querySelector('.tile-gelenk').classList.add('is-flipped'); 
         updateUI();
 
         if (result.event === "goal") {
-            alert("Ziel erreicht! Willkommen in Level " + result.newLevel); // Korrigiert
+            alert("Ziel erreicht! Willkommen in Level " + result.newLevel);
 
-            gameState.level = result.newLevel;     // Korrigiert
-            gameState.currentPos = result.newBeginn; // Korrigiert
-            gameState.goalPos = result.newQuest;     // Korrigiert
+            userDetails.level = result.newLevel;     
+            userDetails.currentPos = result.newBeginn;
+            userDetails.goalPos = result.newQuest;    
 
-            let NewSpecialTiles = JSON.parse(result.newField); // Korrigiert
+            let NewSpecialTiles = JSON.parse(result.newField);
 
-            gameState.special = NewSpecialTiles;
+            userDetails.special = NewSpecialTiles;
             updateUI();
             createGrid(100);
         } else if (result.event === "SchuldenKonto") {
 
-            alert(`Energie leer! Du hast ${result.newDebt} Schulden gemacht.`); // Korrigiert
+            alert(`Energie leer! Du hast ${result.newDebt} Schulden gemacht.`); 
             location.reload();
 
         } else if (result.event === "boost") {
@@ -254,16 +260,16 @@ gameGrid.addEventListener('click', async (e) => {
 });
 
 function updateUI() {
-    document.getElementById('player-legend').textContent = `Energie: ${gameState.stamina}`;
-    document.getElementById('current-map').textContent = `Map: ${gameState.level}`;
-    document.getElementById('user-login-screen').textContent = gameState.username;
+    document.getElementById('player-legend').textContent = `Energie: ${userDetails.stamina}`;
+    document.getElementById('current-map').textContent = `Map: ${userDetails.level}`;
+    document.getElementById('user-login-screen').textContent = userDetails.username;
 
     if (schuldenAnzeige) {
-        schuldenAnzeige.textContent = `Schulden: ${gameState.schulden}`;
+        schuldenAnzeige.textContent = `Schulden: ${userDetails.schulden}`;
     }
 
     if (bonusPoints) {
-        bonusPoints.textContent = `Bonus: ${gameState.bonus}`;
+        bonusPoints.textContent = `Bonus: ${userDetails.bonus}`;
     }
 }
 
@@ -273,25 +279,30 @@ window.addEventListener("load", async () => {
     const data = await res.json();
 
     if (data.logged_in) {
-        gameState.username = data.username;
-        gameState.level = data.level;
-        gameState.stamina = data.stamina;
-        gameState.currentPos = data.currentPos || 0;      // Korrigiert
-        gameState.schulden = data.roblocksSchulden || 0; // Korrigiert
-        gameState.bonus = data.bonus;
-        gameState.goalPos = data.goalPos;                  // Korrigiert
+        userDetails.username = data.username;
+        userDetails.level = data.level;
+        userDetails.stamina = data.stamina;
+        userDetails.currentPos = data.currentPos || 0;     
+        userDetails.schulden = data.roblocksSchulden || 0;
+        userDetails.bonus = data.bonus;
+        userDetails.goalPos = data.goalPos;                  
+        userDetails.gameState = data.gameState;
 
-        if (data.specialTiles) { // Korrigiert
-            gameState.special = JSON.parse(data.specialTiles); // Korrigiert
+        if (data.specialTiles) {
+            userDetails.special = JSON.parse(data.specialTiles);
         }
 
-        showGamePage();
+        if (userDetails.gameState === 'FINISHED') {
+            showEndScreen(data);
+        } else {
+            showGamePage();
 
-        currentMap.style.display = "flex";
-        playerLegend.style.display = "flex";
-        schuldenAnzeige.style.display = "flex";
-        bonusPoints.style.display = "flex";
-        logoutLink.style.display = "flex";
+            currentMap.style.display = "flex";
+            playerLegend.style.display = "flex";
+            schuldenAnzeige.style.display = "flex";
+            bonusPoints.style.display = "flex";
+            logoutLink.style.display = "flex";
+        }
     }
 });
 
@@ -327,9 +338,16 @@ function showCustomAlert(Nachricht, styleKlasse) {
 }
 
 async function showEndScreen(result) {
+    const statusBar = document.getElementById("status-bar");
+
     gamePage.classList.remove("active", "visible");
     gamePage.classList.add("hidden");
 
     leaderBoardContainer.classList.remove("hidden");
     leaderBoardContainer.classList.add("active", "visible");
+
+    userLoginInScreen.textContent = result.username;
+    //statusBar.style.display = "none";
+
+    userPreviewName.textContent = `Willkommen zu deiner Bilanz, Spieler ${result.username}.`;
 }
