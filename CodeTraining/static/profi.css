@@ -235,16 +235,17 @@ p {
 }
 
 .leader-board-container {
+    margin-top: 20px;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1000;
-    height: 400px;
+    height: 450px;
     width: 800px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     background-color: bisque;
     color: magenta;
@@ -253,13 +254,39 @@ p {
 }
 
 #leader-header {
-    margin-bottom: 20px;
+    padding-top: 20px;
+    padding-bottom: 10px;
 }
 
 .user-preview-name {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: medium;
     font-weight: 500;
+}
+
+.user-preview-text {    
+    padding-top: 5px;
+    font-family: Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: medium;
+    font-weight: 300;
+}
+
+.score-row {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: row;
+}
+
+.user-name-plate {
+    padding-right: 100px;
+}
+
+.progress-fill {
+    font-size: medium;
+}   
+
+.progress-text {
+    font-size: medium;
 }
 
 .hidden {

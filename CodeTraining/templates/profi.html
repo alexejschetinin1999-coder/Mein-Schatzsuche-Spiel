@@ -59,22 +59,24 @@
     <div class="leader-board-container hidden">
         <h3 id="leader-header">User Preview</h3>
 
+        <span class="user-preview-name"></span>
+        <p class="user-preview-text">
+            Hier unten konnen Sie eine Billanz sehen, wie gut die besten Spieler abgeschnitten 
+            haben.
+        </p>
+
         <div class="score-row">
-            <span class="user-preview-name"></span>
-            <span class="user-preview-map"></span>
+            <span class="user-name-plate">kas</span>
 
             <div class="bar-container">
-                <div 
-                    id="stamina-bar" 
-                    class="progress-bar" 
-                    role="progressbar"
-                    aria-valuenow=""
-                    aria-voluemax=""
-                    aria-valuemin=""
-                    aria-label=""
-                >
-                <div id="stamina-fill" class="progress-fill"></div>
-                <span id="stamina-text" class="progress-text"></span>
+                <div id="schulden-bar" class="progress-bar">
+                    <div id="schulden-fill" class="progress-fill"></div>
+                    <span id="schulden-text" class="progress-text">{{ schulden }}</span>
+                </div>
+
+                <div id="bonus-bar" class="progress-bar">
+                    <div id="bonus-fill" class="progress-fill"></div>
+                    <span id="bonus-text" class="progress-text">{{ bonus }}</span>
                 </div>
             </div>  
         </div>

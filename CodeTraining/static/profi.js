@@ -16,7 +16,15 @@ const alertText = document.getElementById("alert-text");
 const alertButton = document.getElementById("alert-button");
 const leaderBoardContainer = document.querySelector(".leader-board-container");
 const userPreviewName = document.querySelector(".user-preview-name");
-const userPreviewMap = document.querySelector(".user-preview-map");
+const scoreRow = document.querySelector(".score-row");
+const userNamePlate = document.querySelector(".user-name-plate");
+const barContainer = document.querySelector(".bar-container");
+const schuldenFill = document.getElementById("schulden-fill");
+const schuldenText = document.getElementById("schulden-text");
+const progressFill = document.querySelectorAll(".progress-fill");
+const progressText = document.querySelectorAll(".progress-text");
+const bonusFill = document.getElementById("bonus-fill");
+const bonusText = document.getElementById("bonus-text");
 
 const userDetails = {
     username: 'Gast',
@@ -346,8 +354,35 @@ async function showEndScreen(result) {
     leaderBoardContainer.classList.remove("hidden");
     leaderBoardContainer.classList.add("active", "visible");
 
-    userLoginInScreen.textContent = result.username;
-    //statusBar.style.display = "none";
+    renderLeaderboard(result);
+}
 
-    userPreviewName.textContent = `Willkommen zu deiner Bilanz, Spieler ${result.username}.`;
+async function renderLeaderboard(data) {
+    userLoginInScreen.textContent = data.username;
+    userPreviewName.textContent = `Willkommen zu deiner Bilanz, Spieler ${data.username}.`;
+
+    const liste = result.top_scores;
+
+    liste.forEach(spieler => {
+        const spielerDiv = document.createElement("div");
+        spielerDiv.className = "player-entry";
+
+        spielerDiv.innerHTML = `
+            <span>${spieler.username}</span>
+
+            <div class="bar-container">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                    <span class="progress-text">${spieler.schulden} Schulden</span>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                    <span class="progress-text">${spieler.bonus} Bonus</span>
+                </div>
+            </div>
+        `;
+
+        scoreRow.appendChild(spielerDiv);
+    });
 }
