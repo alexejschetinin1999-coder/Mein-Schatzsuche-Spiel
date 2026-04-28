@@ -8,7 +8,11 @@
     --shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
 
 body {
     font-family: 'Segoe UI', system-ui, sans-serif;
@@ -19,10 +23,10 @@ body {
     flex-direction: column;
 }
 
-input {
-    padding: 5px !important;
-}
+input { padding: 5px !important; }
+button {cursor: pointer !important;}
 
+/* HEADER & STATUS */
 .game-header {
     background: rgba(0,0,0,0.5);
     padding: 1rem;
@@ -38,16 +42,26 @@ input {
     align-items: center;
 }
 
-.container {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+/* PAGES, CARDS & LINKS */
+.container { 
+    flex: 1; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    padding: 20px; 
 }
 
-.page { display: none; width: 100%; max-width: 800px; }
-.page.active { display: flex; flex-direction: column; align-items: center; }
+.page { 
+    display: none; 
+    width: 100%; 
+    max-width: 800px; 
+}
+
+.page.active { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+}
 
 .card {
     background: rgba(255,255,255,0.1);
@@ -58,44 +72,43 @@ input {
     text-align: center;
 }
 
-p {
-    margin-bottom: 15px;
+p { margin-bottom: 15px; }
+
+.small-text { 
+    margin-top: 15px; 
+    margin-bottom: 0px; 
 }
 
-.small-text {
-    margin-top: 15px;
-    margin-bottom: 0px;
+/* HIER IST DEIN REGISTER-LINK */
+#register-link { 
+    margin-left: 10px; 
+    margin-top: 15px; 
+    color: yellow; 
+    text-decoration: none;
+    font-weight: bold;
 }
 
-#register-link {
-    margin-left: 10px;
-    margin-top: 15px;
-    color: yellow;
-}
+#register-link:hover { color: yellowgreen; }
 
-#register-link:hover {
-    color: yellowgreen;
-}
-
-/* DAS GITTER - PROFI STYLE */
+/* SPIELFELD (GRID) */
 .map-grid {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     gap: 8px;
     width: 100%;
-    aspect-ratio: 1 / 1; /* Hält das Gitter quadratisch */
+    aspect-ratio: 1 / 1;
     background: var(--secondary-color);
     padding: 10px;
     border-radius: 8px;
 }
 
-.tile-container {
-    perspective: 1000px;
-    cursor: pointer;
+.tile-container { 
+    perspective: 1000px; 
+    cursor: pointer; 
 }
 
 .tile-gelenk {
-    width: 100%;
+    width: 100%; 
     height: 100%;
     position: relative;
     transition: transform 0.5s;
@@ -106,7 +119,7 @@ p {
 
 .tile-front, .tile-back {
     position: absolute;
-    width: 100%;
+    width: 100%; 
     height: 100%;
     backface-visibility: hidden;
     display: flex;
@@ -117,8 +130,16 @@ p {
     font-weight: bold;
 }
 
-.tile-front { background: var(--tile-front); color: white; }
-.tile-back { background: var(--tile-back); color: black; transform: rotateY(180deg); }
+.tile-front { 
+    background: var(--tile-front); 
+    color: white; 
+}
+
+.tile-back { 
+    background: var(--tile-back); 
+    color: black; 
+    transform: rotateY(180deg); 
+}
 
 /* BUTTONS */
 .btn-primary {
@@ -134,141 +155,122 @@ p {
 
 .btn-primary:hover { transform: scale(1.05); }
 
-/* MOBILE ANPASSUNG */
-@media (max-width: 600px) {
-    .map-grid { gap: 3px; padding: 5px; }
-    .tileFront, .tileBack { font-size: 0.5rem; }
-}
-
-/* Das hier sorgt dafür, dass das Overlay ÜBER der Seite schwebt */
+/* OVERLAY & MODAL */
 .overlay {
     position: fixed;
-    top: 0;
+    top: 0; 
     left: 0;
-    width: 100%;
+    width: 100%; 
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* Dunkler Hintergrund */
-    display: none; /* Standardmäßig unsichtbar */
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Ganz nach vorne schieben */
-    backdrop-filter: blur(5px); /* Schicker Unschärfe-Effekt */
+    z-index: 1000;
+    backdrop-filter: blur(5px);
 }
 
-.overlay h3 {
-    margin-bottom: 20px;
+#join-account { margin-top: 15px; }
+
+.modal { 
+    background: #2c3e50; 
+    border: 2px solid var(--primary-color); 
+    min-width: 320px; 
 }
 
-/* Die Karte im Overlay */
-.modal {
-    background: #2c3e50;
-    border: 2px solid var(--primary-color);
-    min-width: 320px;
+.vertical-form { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
 }
 
-/* Ein bisschen Abstand für die Formular-Felder */
-.vertical-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.button-group { 
+    display: flex; 
+    gap: 10px; 
+    justify-content: center; 
+    margin-top: 5px; 
 }
 
-.button-group {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 10px;
-}
+#go-back { padding: 5px; }
 
-#go-back {
-    padding: 5px;
-}
-
+/* ALERTS */
 .confirm-message {
     position: fixed;
-    top: 30%;
+    top: 30%; 
     left: 50%;
     display: none;
-    align-items: center;
     transform: translateX(-50%);
     z-index: 2000;
     padding: 20px;
     width: 450px;
-    height: 125px;
 }
 
-.confirm-message.style-move {
-    background: #ff4081;
-    color: white;
-    box-shadow: 5px 5px 0px yellowgreen;
-    font-style: italic;
-    border: rgb(248, 77, 106) solid 10px;
-    border-radius: 5px 30px 5px 30px;
-}
+.confirm-message { 
+    position: fixed; 
+    top: 30%; 
+    left: 50%; 
+    display: none; 
+    align-items: center; 
+    transform: translateX(-50%); 
+    z-index: 2000; 
+    padding: 20px; 
+    width: 450px; 
+    height: 125px; 
+} 
 
-.confirm-message.style-cheat {
-    background: #020202;
-    color: #00ff00;
-    border: 1px solid #00ff00;
-    text-shadow: 0 0 5px #00ff00;
-    font-family: 'Consolas', monospace;
-    border: lightgreen solid 10px;
-    border-radius: 10px;
-}
+.confirm-message.style-move { 
+    background: #ff4081; 
+    color: white; 
+    box-shadow: 5px 5px 0px yellowgreen; 
+    font-style: italic; 
+    border: rgb(248, 77, 106) solid 10px; 
+    border-radius: 5px 30px 5px 30px; 
+} 
 
-#alert-text {
-    max-width: 300px;
-}
+.confirm-message.style-cheat { 
+    background: #020202; 
+    color: #00ff00; 
+    border: 1px solid #00ff00; 
+    text-shadow: 0 0 5px #00ff00; 
+    font-family: 'Consolas', monospace; 
+    border: lightgreen solid 10px; 
+    border-radius: 10px; 
+} 
 
 #alert-button {
     background-color: rgb(225, 225, 103);
-    position: fixed;
-    right: 3%;
-    bottom: 10%;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', Verdana, sans-serif;
+    font-family: 'Lucida Sans', sans-serif;
     font-size: large;
-    margin: 10px;
-    padding: 5px;
+    margin-top: 15px;      /* Erzeugt Abstand zum Text darüber */
+    padding: 8px 20px;
     cursor: pointer;
     border: blue double 5px;
     border-radius: 2.5px;
+    position: relative;    /* WICHTIG: Nicht mehr fixed! */
+    align-self: center;
 }
 
+/* LEADERBOARD & BALKEN */
 .leader-board-container {
     margin-top: 20px;
     position: fixed;
-    top: 50%;
+    top: 50%; 
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1000;
-    height: 450px;
+    height: 450px; 
     width: 800px;
-    display: flex;
+    display: flex; 
     flex-direction: column;
-    justify-content: flex-start;
     align-items: center;
     background-color: bisque;
-    color: magenta;
+    color: blue;
     border: 10px double yellowgreen;
     border-radius: 5px;
 }
 
 #leader-header {
-    padding-top: 20px;
-    padding-bottom: 10px;
-}
-
-.user-preview-name {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: medium;
-    font-weight: 500;
-}
-
-.user-preview-text {    
-    padding-top: 5px;
-    font-family: Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    font-size: medium;
-    font-weight: 300;
+    padding: 15px 0;
 }
 
 .score-row {
@@ -279,20 +281,52 @@ p {
 
 .user-name-plate {
     padding-right: 100px;
+    font-weight: bold;
+}
+
+.stats-wrapper {
+    display: flex;
+    align-items: center; /* Das sorgt für die vertikale Mitte! */
+    gap: 15px;
+    margin-bottom: 10px;
+    height: 24px; /* Hilft bei der Zentrierung */
+}
+
+.progress-bar {
+    width: 200px; 
+    height: 20px;
+    background-color: grey;
+    border-radius: 10px;
+    border: 2px solid palevioletred;
+    overflow: hidden;
+    position: relative;
 }
 
 .progress-fill {
-    font-size: medium;
-}   
+    height: 100%; 
+    width: 0%;
+    border-radius: 10px 0 0 10px;
+    transition: width 0.4s ease-in-out;
+}
+
+#schulden-fill { background-color: red; }
+#bonus-fill { background-color: green; }
 
 .progress-text {
-    font-size: medium;
+    font-size: 16px;
+    color: blue;
+    font-weight: bold;
+    min-width: 40px;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1; /* Schiebt die Zahl perfekt in die Mitte */
 }
 
-.hidden {
-    display: none !important;
-}
+/* HILFSKLASSEN */
+.hidden { display: none !important; }
+.visible { display: flex !important; }
 
-.visible {
-    display: flex !important;
+@media (max-width: 600px) {
+    .map-grid { gap: 3px; padding: 5px; }
+    .tile-front, .tile-back { font-size: 0.5rem; }
 }

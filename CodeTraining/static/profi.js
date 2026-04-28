@@ -375,7 +375,7 @@ async function renderLeaderboard(data) {
                     <div class="progress-fill"></div>
                     <span class="progress-text">${spieler.schulden} Schulden</span>
                 </div>
-
+                <br>
                 <div class="progress-bar">
                     <div class="progress-fill"></div>
                     <span class="progress-text">${spieler.bonus} Bonus</span>
