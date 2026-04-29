@@ -205,6 +205,7 @@ def move():
         event_name = "game_break"
         still_playing = 'FINISHED'
         level_up = 10
+        User_Leage()
 
     update_sql = """
         UPDATE profi_nutzer 
@@ -238,6 +239,36 @@ def move():
         "newDebt": finale_schulden,
         "newBonus": finaler_bonus
     })
+
+@app.route('/Leaderboard')
+def User_Leage():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        query = """  
+                    SELECT
+                        username, 
+                        roblocks_schulden,
+                        bonus_points,
+                        (bonus_points - roblocks_schulden) AS topScores     
+                    FROM profi_nutzer
+                    ORDER BY gesamt_score DESC
+                    LIMIT 5     
+                """
+
+        cursor.execute(query)
+        top_scores = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        return jsonify({
+            "status": "success", 
+            "topScores": top_scores
+        })
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/CheckLogin')
 def check_login():

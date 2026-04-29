@@ -193,61 +193,84 @@ p { margin-bottom: 15px; }
 
 #go-back { padding: 5px; }
 
-/* ALERTS */
+/* --- ALERTS & CONFIRM MESSAGES --- */
 .confirm-message {
     position: fixed;
-    top: 30%; 
+    top: 50%; /* Mittig platzieren */
     left: 50%;
-    display: none;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%); /* Exakte Zentrierung */
+    display: none; /* Flex wird per JS gesetzt */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     z-index: 2000;
-    padding: 20px;
-    width: 450px;
+    padding: 30px;
+    width: 90%;
+    max-width: 500px;
+    min-height: 180px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-.confirm-message { 
-    position: fixed; 
-    top: 30%; 
-    left: 50%; 
-    display: none; 
-    align-items: center; 
-    transform: translateX(-50%); 
-    z-index: 2000; 
-    padding: 20px; 
-    width: 450px; 
-    height: 125px; 
-} 
-
-.confirm-message.style-move { 
-    background: #ff4081; 
-    color: white; 
-    box-shadow: 5px 5px 0px yellowgreen; 
-    font-style: italic; 
-    border: rgb(248, 77, 106) solid 10px; 
-    border-radius: 5px 30px 5px 30px; 
-} 
-
-.confirm-message.style-cheat { 
-    background: #020202; 
-    color: #00ff00; 
-    border: 1px solid #00ff00; 
-    text-shadow: 0 0 5px #00ff00; 
-    font-family: 'Consolas', monospace; 
-    border: lightgreen solid 10px; 
-    border-radius: 10px; 
-} 
-
+/* Der neue vernünftige Button */
 #alert-button {
-    background-color: rgb(225, 225, 103);
-    font-family: 'Lucida Sans', sans-serif;
-    font-size: large;
-    margin-top: 15px;      /* Erzeugt Abstand zum Text darüber */
-    padding: 8px 20px;
+    margin-top: 25px;
+    padding: 10px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
     cursor: pointer;
-    border: blue double 5px;
-    border-radius: 2.5px;
-    position: relative;    /* WICHTIG: Nicht mehr fixed! */
-    align-self: center;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+}
+
+#alert-button:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+}
+
+/* 1. Pinker Modus (Events) */
+.confirm-message.style-move {
+    background: #ff4081;
+    color: white;
+    border: 6px solid #f84d6a;
+    border-radius: 20px;
+}
+
+.style-move #alert-button {
+    background: #ffeb3b; /* Gelber Button für Pinke Box */
+    color: #c2185b;
+}
+
+.style-move #alert-button:hover {
+    background: #fff176;
+}
+
+/* 2. Hacker Modus (Cheat/Fehler) */
+.confirm-message.style-cheat {
+    background: #000000;
+    color: #00ff00;
+    border: 3px solid #00ff00;
+    font-family: 'Consolas', monospace;
+}
+
+.style-cheat #alert-button {
+    background: #00ff00; /* Grüner Button für Schwarze Box */
+    color: #000;
+}
+
+.style-cheat #alert-button:hover {
+    background: #33ff33;
+    box-shadow: 0 0 15px #00ff00;
+}
+
+/* Text im Alert */
+#alert-text {
+    font-size: 1.2rem;
+    line-height: 1.4;
+    margin: 0;
 }
 
 /* LEADERBOARD & BALKEN */
@@ -280,7 +303,7 @@ p { margin-bottom: 15px; }
 }
 
 .user-name-plate {
-    padding-right: 100px;
+    padding-right: 50px;
     font-weight: bold;
 }
 

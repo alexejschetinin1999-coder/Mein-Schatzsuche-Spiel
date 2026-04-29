@@ -246,24 +246,18 @@ gameGrid.addEventListener('click', async (e) => {
 
         } else if (result.event === "boost") {
             showCustomAlert("Du hast ein Koffe/Energy drink bekommen. Du hast jetzt + 5 Züge.", "style-move");
-
-            universalAlert.style.width = "440px";
-            universalAlert.style.height = "120px";
-
         } else if (result.event === "bombe") {
             showCustomAlert("Du bist auf einer Bombe gestoßen. Jetzt hast du auf grund eines streifschussen - 5 Züge weniger.", "style-move");
-
-            universalAlert.style.width = "480px";
-            universalAlert.style.height = "130px";
-            alertText.style.maxWidth = "370px";
-
         } else if (result.event === "chaos") {
             showCustomAlert("Du bist auf einer Stadt getroffen, Da nicht sicher sein kannst ob die dir helfen oder nicht. Kannst du entweder 5 Züge +/- bekommen.", "style-move");
-
-            universalAlert.style.width = "525px";
-            universalAlert.style.height = "150px";
-            alertText.style.maxWidth = "400px";
-        } 
+        } else if (result.event === "game_break") {
+            fetch('/Leaderboard')
+                .then(res => res.json())
+                .then(data => {
+                    alert("Herzlichen Gluckwunsch! Sie haben das Spiel abgeschlosen.");
+                    showEndScreen(result);
+                });
+        }
     }
 });
 
@@ -342,7 +336,7 @@ function showGamePage() {
 function showCustomAlert(Nachricht, styleKlasse) {
     alertText.textContent = Nachricht;
     universalAlert.className = "confirm-message " + styleKlasse;
-    universalAlert.style.display = "block";
+    universalAlert.style.display = "flex";
 }
 
 async function showEndScreen(result) {
@@ -360,6 +354,7 @@ async function showEndScreen(result) {
 async function renderLeaderboard(data) {
     userLoginInScreen.textContent = data.username;
     userPreviewName.textContent = `Willkommen zu deiner Bilanz, Spieler ${data.username}.`;
+    userNamePlate.textContent = data.username;
 
     const liste = result.top_scores;
 
@@ -368,21 +363,27 @@ async function renderLeaderboard(data) {
         spielerDiv.className = "player-entry";
 
         spielerDiv.innerHTML = `
-            <span>${spieler.username}</span>
-
-            <div class="bar-container">
+        <div class="player-info-header">
+            <strong>${spieler.username}</strong> 
+            <span class="total-score-badge">Gesamt: ${spieler.topScores}</span>
+        </div>
+        
+        <div class="bar-container">
+            <div class="stats-wrapper">
                 <div class="progress-bar">
-                    <div class="progress-fill"></div>
-                    <span class="progress-text">${spieler.schulden} Schulden</span>
+                    <div class="progress-fill" style="width: ${spieler.roblocks_schulden}%; background: red;"></div>
                 </div>
-                <br>
-                <div class="progress-bar">
-                    <div class="progress-fill"></div>
-                    <span class="progress-text">${spieler.bonus} Bonus</span>
-                </div>
+                <span class="progress-text">${spieler.roblocks_schulden} Schulden</span>
             </div>
+            <div class="stats-wrapper">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${spieler.bonus_points}%; background: green;"></div>
+                </div>
+                <span class="progress-text">${spieler.bonus_points} Bonus</span>
+            </div>
+        </div>
         `;
-
+        
         scoreRow.appendChild(spielerDiv);
     });
 }
