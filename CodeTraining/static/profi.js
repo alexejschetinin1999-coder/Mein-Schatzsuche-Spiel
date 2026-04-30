@@ -354,32 +354,32 @@ async function showEndScreen(result) {
 async function renderLeaderboard(data) {
     userLoginInScreen.textContent = data.username;
     userPreviewName.textContent = `Willkommen zu deiner Bilanz, Spieler ${data.username}.`;
-    userNamePlate.textContent = data.username;
+    userNamePlate.textContent = `${data.username} (Gesamt: ${data.topScores})`;
 
-    const liste = result.top_scores;
+    const liste = data.topScores;
 
     liste.forEach(spieler => {
         const spielerDiv = document.createElement("div");
         spielerDiv.className = "player-entry";
 
         spielerDiv.innerHTML = `
-        <div class="player-info-header">
-            <strong>${spieler.username}</strong> 
-            <span class="total-score-badge">Gesamt: ${spieler.topScores}</span>
-        </div>
+        <div class="score-row">
+            <span class="user-name-plate">${spieler.username} (Gesamt: ${spieler.topScores})</span>
         
-        <div class="bar-container">
-            <div class="stats-wrapper">
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${spieler.roblocks_schulden}%; background: red;"></div>
+            <div class="bar-container">
+                <div class="stats-wrapper">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${spieler.roblocks_schulden}"></div>
+                    </div>
+                    <span class="progress-text">${spieler.roblocks_schulden}</span>
                 </div>
-                <span class="progress-text">${spieler.roblocks_schulden} Schulden</span>
-            </div>
-            <div class="stats-wrapper">
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${spieler.bonus_points}%; background: green;"></div>
+
+                <div class="stats-wrapper">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${spieler.bonus_points}"></div>
+                    </div>
+                    <span class="progress-text">${spieler.bonus_points}</span>
                 </div>
-                <span class="progress-text">${spieler.bonus_points} Bonus</span>
             </div>
         </div>
         `;

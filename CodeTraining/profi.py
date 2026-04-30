@@ -253,7 +253,7 @@ def User_Leage():
                         bonus_points,
                         (bonus_points - roblocks_schulden) AS topScores     
                     FROM profi_nutzer
-                    ORDER BY gesamt_score DESC
+                    ORDER BY topScores DESC
                     LIMIT 5     
                 """
 

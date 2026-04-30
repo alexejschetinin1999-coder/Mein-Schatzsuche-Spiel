@@ -332,8 +332,8 @@ p { margin-bottom: 15px; }
     transition: width 0.4s ease-in-out;
 }
 
-#schulden-fill { background-color: red; }
-#bonus-fill { background-color: green; }
+#schulden-fill { background-color: red !important; }
+#bonus-fill { background-color: green !important; }
 
 .progress-text {
     font-size: 16px;
