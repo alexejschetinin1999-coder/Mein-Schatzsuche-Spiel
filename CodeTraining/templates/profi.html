@@ -64,25 +64,7 @@
             Hier unten können Sie eine Bilanz sehen, wie gut die besten Spieler abgeschnitten haben.
         </p>
 
-        <div class="score-row">
-            <span class="user-name-plate"></span>
-        
-            <div class="bar-container">
-                <div class="stats-wrapper">
-                    <div id="schulden-bar" class="progress-bar">
-                        <div id="schulden-fill" class="progress-fill"></div>
-                    </div>
-                    <span id="schulden-text" class="progress-text">{{ schulden }}</span>
-                </div>
-
-                <div class="stats-wrapper">
-                    <div id="bonus-bar" class="progress-bar">
-                        <div id="bonus-fill" class="progress-fill"></div>
-                    </div>
-                    <span id="bonus-text" class="progress-text">{{ bonus }}</span>
-                </div>
-            </div>
-        </div>
+        <div id="leaderboard-list"></div>
     </div>
     
     <script src="{{ url_for('static', filename='profi.js') }}"></script>

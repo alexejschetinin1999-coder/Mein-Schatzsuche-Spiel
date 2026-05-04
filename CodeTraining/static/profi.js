@@ -15,16 +15,8 @@ const universalAlert = document.getElementById("universal-alert");
 const alertText = document.getElementById("alert-text");
 const alertButton = document.getElementById("alert-button");
 const leaderBoardContainer = document.querySelector(".leader-board-container");
+const leaderboardList = document.getElementById("leaderboard-list");
 const userPreviewName = document.querySelector(".user-preview-name");
-const scoreRow = document.querySelector(".score-row");
-const userNamePlate = document.querySelector(".user-name-plate");
-const barContainer = document.querySelector(".bar-container");
-const schuldenFill = document.getElementById("schulden-fill");
-const schuldenText = document.getElementById("schulden-text");
-const progressFill = document.querySelectorAll(".progress-fill");
-const progressText = document.querySelectorAll(".progress-text");
-const bonusFill = document.getElementById("bonus-fill");
-const bonusText = document.getElementById("bonus-text");
 
 const userDetails = {
     username: 'Gast',
@@ -255,7 +247,7 @@ gameGrid.addEventListener('click', async (e) => {
                 .then(res => res.json())
                 .then(data => {
                     alert("Herzlichen Gluckwunsch! Sie haben das Spiel abgeschlosen.");
-                    showEndScreen(result);
+                    showEndScreen(data);
                 });
         }
     }
@@ -352,9 +344,14 @@ async function showEndScreen(result) {
 }
 
 async function renderLeaderboard(data) {
+
+    console.log("Leaderboard-Daten:", data);
+    console.log("Keys:", Object.keys(data));
+    console.log("TopScores:", data.topScores);
+
+
     userLoginInScreen.textContent = data.username;
     userPreviewName.textContent = `Willkommen zu deiner Bilanz, Spieler ${data.username}.`;
-    userNamePlate.textContent = `${data.username} (Gesamt: ${data.topScores})`;
 
     const liste = data.topScores;
 
@@ -369,14 +366,14 @@ async function renderLeaderboard(data) {
             <div class="bar-container">
                 <div class="stats-wrapper">
                     <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${spieler.roblocks_schulden}"></div>
+                        <div class="progress-fill schulden-fill" style="width: ${spieler.roblocks_schulden}"></div>
                     </div>
                     <span class="progress-text">${spieler.roblocks_schulden}</span>
                 </div>
 
                 <div class="stats-wrapper">
                     <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${spieler.bonus_points}"></div>
+                        <div class="progress-fill bonus-fill" style="width: ${spieler.bonus_points}"></div>
                     </div>
                     <span class="progress-text">${spieler.bonus_points}</span>
                 </div>
@@ -384,6 +381,6 @@ async function renderLeaderboard(data) {
         </div>
         `;
         
-        scoreRow.appendChild(spielerDiv);
+        leaderboardList.appendChild(spielerDiv);
     });
 }
