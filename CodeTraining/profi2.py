@@ -6,7 +6,6 @@ import json
 app = Flask(__name__)
 app.secret_key = 'dein_ganz_geheimes_passwort'
 
-# --- Datenbankverbindung ---
 def get_db_connection():
     return mysql.connector.connect(
         host="localhost",
@@ -15,7 +14,6 @@ def get_db_connection():
         database="monster_arena"
     )
 
-# --- Startseite laden ---
 @app.route('/')
 def index():
     return render_template('profi2.html')

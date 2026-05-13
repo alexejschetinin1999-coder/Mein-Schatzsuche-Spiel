@@ -1,0 +1,21 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#first-page {
+    background-image: url("huyao_xiao_hong_nian_wallpaper_for_screen.jpg");
+    background-size: cover;
+    background-position: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    height: 50vh;
+    width: 50vw;
+}   
+
+#button-start-area {
+    display: flex;
+    flex-direction: column;
+}
