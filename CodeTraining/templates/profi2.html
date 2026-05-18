@@ -9,8 +9,14 @@
 <body>
 
     <div id="first-page">
-        <div id="button-start-area">
-            <img src="{{ url_for('static', filename='logo_only.jpg') }}" alt="a picture"> 
+        <section class="game-info">
+            <p>Version 1.0.3</p>
+            <p>Server: Europa</p>
+            <button class="game-info-buttons" id="login-pfad">Login</button>
+            <button class="game-info-buttons" id="account-change-pfad">Account Wechseln</button>
+        </section>
+
+        <div class="button-start-area">
             <button id="game-start">Tap to Start</button>
         </div>
     </div>
