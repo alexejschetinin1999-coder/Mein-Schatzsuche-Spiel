@@ -9,6 +9,7 @@
 <body>
 
     <div id="first-page">
+
         <section class="game-info">
             <p>Version 1.0.3</p>
             <p>Server: Europa</p>
@@ -19,6 +20,29 @@
         <div class="button-start-area">
             <button id="game-start">Tap to Start</button>
         </div>
+
+        <div class="hidden" id="login-screen">
+            <div class="login-content">
+                <p id="registrieren-remarker">Du musst dich zuerst Registieren!</p>
+                <h3>Anmeldeoptionen</h3>
+
+                <button class="login-button">
+                    <img src="" class="login-icon">
+                    <span>Google</span>
+                </button>
+
+                <button>
+                    <img src="" class="login-icon">
+                    <span>Facebook</span>
+                </button>
+
+                <button>
+                    <img src="" class="login-button">
+                    <span>E-Mail</span>
+                </button>
+            </div>
+        </div>
+
     </div>
     
     <script src="{{ url_for('static', filename='profi2.js') }}"></script>

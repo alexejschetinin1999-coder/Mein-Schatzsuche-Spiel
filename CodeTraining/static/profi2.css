@@ -70,3 +70,7 @@ body {
         0 0 12px #ffb347,
         0 0 18px #ffb347;
 }
+
+.hidden {
+    display: none;
+}
