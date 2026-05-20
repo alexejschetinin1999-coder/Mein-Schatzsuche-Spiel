@@ -2,6 +2,7 @@ const loginPfad = document.getElementById("login-pfad");
 const accountChangePfad = document.getElementById("account-change-pfad");
 const gameStart = document.getElementById("game-start");
 const loginScreen = document.getElementById("login-screen");
+const loginContent = document.querySelector(".login-content");
 
 gameStart.addEventListener("click", () => {
     checkUserExsits();
@@ -15,6 +16,14 @@ async function checkUserExsits() {
         console.log("User ist eingeloggt", data.username);
     } else {
         console.log("User ist nicht eingeloggt");
-        loginScreen.style.display = "block";
+        loginScreen.style.display = "flex";
     }
 }
+
+loginPfad.addEventListener("click", () => {
+    loginScreen.style.display = "flex";
+});
+
+loginScreen.addEventListener("click", () => {
+    loginScreen.style.display = "none";
+});
