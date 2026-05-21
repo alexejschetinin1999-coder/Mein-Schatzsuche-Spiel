@@ -1,6 +1,7 @@
 body {
     margin: 0;
     padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 #first-page {
@@ -15,13 +16,15 @@ body {
     transform: translate(-50%, -50%);
 }
 
+/* Game-Info links oben */
+
 .game-info {
     position: absolute;
     top: 12px;
     left: 15px;
     display: flex;
     flex-direction: column;
-    gap: 4px; 
+    gap: 4px;
     color: #ffd27f;
     text-shadow:
         0px 0px 0px darkblue,
@@ -32,8 +35,8 @@ body {
 }
 
 .game-info-buttons {
-    display: block;      
-    text-align: left;   
+    display: block;
+    text-align: left;
     cursor: pointer;
     border: none;
     background: none;
@@ -48,6 +51,8 @@ body {
     padding-top: 15px;
     padding-bottom: 15px;
 }
+
+/* Start-Button */
 
 .button-start-area {
     position: absolute;
@@ -71,73 +76,124 @@ body {
         0 0 18px #ffb347;
 }
 
-.hidden {
+/* Overlay */
+
+.overlay {
     position: fixed;
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    background: rgba(0,0,0,0.4);
 }
+
+.hidden {
+    display: none !important;
+}
+
+/* Login-Box */
 
 .login-content {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    background-color: white;
-    width: 500px;
-    height: 200px;
-    border: blue solid 5px;
-    border-radius: 3px;
-    padding: 15px;
+    background-color: #ffffff;
+    width: 340px;
+    min-height: 280px;
+    border: 3px solid #3b82f6;
+    border-radius: 6px;
+    padding: 18px 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
 }
 
 #registrieren-remarker {
-    color: red;
-    font-size: large;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode';
+    color: #ff9933;
+    font-size: 15px;
     font-weight: 600;
+    margin-bottom: 8px;
 }
 
 h3 {
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin: 4px 0 14px 0;
+    font-size: 18px;
+    color: #333333;
 }
+
+/* Button-Gruppe */
 
 .button-content {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
-    gap: 20px;
+    align-items: stretch;
+    gap: 12px;
 }
+
+/* Login-Buttons */
 
 .login-button {
     cursor: pointer;
     display: flex;
-    flex-direction: row;
-    gap: 10px;
-    padding: 5px;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: large;
-    height: 50px;
-    border-radius: 3px;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    height: 48px;
+    border-radius: 4px;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333333;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+}
+
+.login-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    filter: brightness(1.03);
 }
 
 #google-button {
-    width: 130px;
-    background-color: lightgreen;
+    background-color: #ffffff;
+    width: 120px;
 }
 
 #facebook-button {
-    width: 145px;
-    background-color: lightblue;
+    background-color: #1877f2;
+    color: #ffffff;
+    width: 135px;
 }
 
 #email-button {
-    height: 65px;
-    width: 125px;
-    background-color: lightgrey;
+    background-color: #f2f2f2;
+    width: 120px;
+}
+
+/* Icons */
+
+.login-icon {
+    height: 28px;
+    width: auto;
+    display: block;
+}
+
+/* Loader (CSS-Spinner) */
+
+.loader {
+    margin-top: 16px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 3px solid #d1d5db;
+    border-top-color: #3b82f6;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }

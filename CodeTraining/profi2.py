@@ -1,47 +1,62 @@
-from flask import Flask, session, render_template, request, jsonify
+from flask import Flask, session, render_template, jsonify
 import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
-import json
+import os
 
 app = Flask(__name__)
-app.secret_key = 'dein_ganz_geheimes_passwort'
+app.secret_key = os.getenv("SECRET_KEY", "dev_only_change_me")
+
 
 def get_db_connection():
-    return mysql.connector.connect(
+    conn = mysql.connector.connect(
         host="localhost",
         user="root",
         password="",
         database="charakter_arena"
     )
+    return conn
 
-@app.route('/')
+
+@app.route("/")
 def index():
-    return render_template('profi2.html')
+    return render_template("profi2.html")
 
-@app.route('/check_Login')
-def Check_Login():
+
+@app.route("/check_login")
+def check_login():
     user_id = session.get("user_id")
 
     if not user_id:
         return jsonify({"loggedIn": False})
 
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-
-    cursor.execute("SELECT id, username FROM users WHERE id = %s", (user_id,))
-    user = cursor.fetchone()
-
-    cursor.close()
-    conn.close()
+    conn = None
+    cursor = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT id, username FROM users WHERE id = %s",
+            (user_id,)
+        )
+        user = cursor.fetchone()
+    except Exception as e:
+        print("DB-Fehler:", e)
+        return jsonify({"loggedIn": False, "error": "DB_Fehler"})
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
 
     if not user:
         session.pop("user_id", None)
         return jsonify({"loggedIn": False})
-    
+
     return jsonify({
         "loggedIn": True,
         "username": user["username"]
     })
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(debug=True, port=5000)

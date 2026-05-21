@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Charakter Arena</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='profi2.css') }}">
 </head>
 <body>
@@ -21,33 +21,34 @@
             <button id="game-start">Tap to Start</button>
         </div>
 
-        <div class="hidden" id="login-screen">
-            <div class="login-content">
-                <p id="registrieren-remarker">Du musst dich zuerst Registieren!</p>
-                
+        <div class="overlay hidden" id="login-screen">
+            <div class="login-content" id="login-box" onclick="event.stopPropagation()">
+                <p id="registrieren-remarker">Du musst dich zuerst registrieren!</p>
                 <h3>Anmeldeoptionen</h3>
 
                 <div class="button-content">
                     <button class="login-button" id="google-button">
-                        <img src="static/google.png" class="login-icon">
+                        <img src="{{ url_for('static', filename='google.png') }}" class="login-icon" alt="Google">
                         <span class="icon-name">Google</span>
                     </button>
 
                     <button class="login-button" id="facebook-button">
-                        <img src="static/facebook.png" class="login-icon">
+                        <img src="{{ url_for('static', filename='facebook.png') }}" class="login-icon" alt="Facebook">
                         <span class="icon-name">Facebook</span>
                     </button>
 
                     <button class="login-button" id="email-button">
-                        <img src="static/email.png" class="login-icon">
+                        <img src="{{ url_for('static', filename='email.png') }}" class="login-icon" alt="E-Mail">
                         <span class="icon-name">E-Mail</span>
                     </button>
                 </div>
+
+                <div class="loader hidden" id="login-loader"></div>
             </div>
         </div>
 
     </div>
-    
+
     <script src="{{ url_for('static', filename='profi2.js') }}"></script>
 </body>
 </html>
