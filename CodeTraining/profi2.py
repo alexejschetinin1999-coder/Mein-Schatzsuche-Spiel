@@ -2,16 +2,19 @@ from flask import Flask, session, render_template, jsonify
 import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "dev_only_change_me")
+db_pass = os.getenv("DB_PASSWORD")
 
 
 def get_db_connection():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="",
+        password=db_pass,
         database="charakter_arena"
     )
     return conn
