@@ -1,71 +1,106 @@
 const loginPfad = document.getElementById("login-pfad");
-const accountChangePfad = document.getElementById("account-change-pfad");
 const gameStart = document.getElementById("game-start");
+
 const loginScreen = document.getElementById("login-screen");
+const loginBox = document.getElementById("login-box");
 const loginLoader = document.getElementById("login-loader");
 
 const googleButton = document.getElementById("google-button");
 const facebookButton = document.getElementById("facebook-button");
 const emailButton = document.getElementById("email-button");
+const gastButton = document.getElementById("gast-button");
 
-function openLoginOverlay() {
-    loginScreen.classList.remove("hidden");
-}
 
-function closeLoginOverlay() {
-    loginScreen.classList.add("hidden");
-}
+const overlayController = {
 
-function showLoader() {
-    loginLoader.classList.remove("hidden");
-}
+    overlay: loginScreen,
+    box: loginBox,
 
-function hideLoader() {
-    loginLoader.classList.add("hidden");
-}
+    init() {
+        this.overlay.addEventListener("click", () => {
+            this.toggle();
+        });
+
+        // Klick in der Box → NICHT schließen
+        this.box.addEventListener("click", (event) => {
+            event.stopPropagation();
+        });
+
+        // Login-Button oben links → Overlay öffnen
+        loginPfad.addEventListener("click", () => {
+            this.toggle();
+        });
+    },
+
+    toggle() {
+        this.overlay.classList.toggle("hidden");
+    }
+};
+
+
+const loaderController = {
+
+    loader: loginLoader,
+
+    show() {
+        this.loader.classList.remove("hidden");
+    },
+
+    hide() {
+        this.loader.classList.add("hidden");
+    }
+};
+
+
+const loginController = {
+
+    methods: {
+        google:   { element: googleButton,   action: googleLogin },
+        facebook: { element: facebookButton, action: facebookLogin },
+        email:    { element: emailButton,    action: emailLogin },
+        guest:    { element: gastButton,     action: gastLogin }
+    },
+
+    init() {
+        Object.values(this.methods).forEach(method => {
+            method.element.addEventListener("click", method.action);
+        });
+    }
+};
 
 gameStart.addEventListener("click", () => {
     checkUserExists();
 });
 
-loginPfad.addEventListener("click", () => {
-    openLoginOverlay();
-});
-
-loginScreen.addEventListener("click", () => {
-    closeLoginOverlay();
-});
 
 async function checkUserExists() {
-    showLoader();
+
+    loaderController.show();
+
     try {
         const response = await fetch("/check_login");
         const data = await response.json();
 
         if (data.loggedIn === true) {
             console.log("User ist eingeloggt:", data.username);
-            // hier später: weiter ins Spiel
         } else {
             console.log("User ist nicht eingeloggt");
-            openLoginOverlay();
+            overlayController.toggle();
         }
+
     } catch (err) {
         console.error("Fehler beim Login-Check:", err);
-        openLoginOverlay();
+        overlayController.toggle();
+
     } finally {
-        hideLoader();
+        loaderController.hide();
     }
 }
 
-// Platzhalter für spätere Aktionen
-googleButton.addEventListener("click", () => {
-    console.log("Google-Login geklickt");
-});
+function googleLogin()  { console.log("Google Login gestartet"); }
+function facebookLogin(){ console.log("Facebook Login gestartet"); }
+function emailLogin()   { console.log("Email Login gestartet"); }
+function gastLogin()    { console.log("Gast Login gestartet"); }
 
-facebookButton.addEventListener("click", () => {
-    console.log("Facebook-Login geklickt");
-});
-
-emailButton.addEventListener("click", () => {
-    console.log("E-Mail-Login geklickt");
-});
+overlayController.init();
+loginController.init();
