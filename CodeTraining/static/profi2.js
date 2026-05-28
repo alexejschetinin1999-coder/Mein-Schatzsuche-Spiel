@@ -10,6 +10,10 @@ const facebookButton = document.getElementById("facebook-button");
 const emailButton = document.getElementById("email-button");
 const gastButton = document.getElementById("gast-button");
 
+const startMessenger = document.getElementById("start-messenger");
+const loaderText = document.getElementById("loader-text");
+const spinner = document.getElementById("spinner");
+
 
 const overlayController = {
 
@@ -68,6 +72,21 @@ const loginController = {
     }
 };
 
+
+const loaderTextController = {
+    
+    message: startMessenger,
+
+    show() {
+        this.message.classList.remove("hidden");
+    },
+
+    hide() {
+        this.message.classList.add("hidden");
+    }
+};
+
+
 gameStart.addEventListener("click", () => {
     checkUserExists();
 });
@@ -75,7 +94,8 @@ gameStart.addEventListener("click", () => {
 
 async function checkUserExists() {
 
-    loaderController.show();
+    //loaderController.show();
+    loaderTextController.show();
 
     try {
         const response = await fetch("/check_login");
@@ -93,8 +113,11 @@ async function checkUserExists() {
         overlayController.toggle();
 
     } finally {
-        loaderController.hide();
+        //loaderController.hide();
+        loaderTextController.hide();
     }
+
+    //loaderTextController.show();
 }
 
 function googleLogin()  { console.log("Google Login gestartet"); }
