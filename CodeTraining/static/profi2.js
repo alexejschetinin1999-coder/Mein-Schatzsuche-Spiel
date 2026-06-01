@@ -94,7 +94,7 @@ gameStart.addEventListener("click", () => {
 
 async function checkUserExists() {
 
-    //loaderController.show();
+    loaderController.show();
     loaderTextController.show();
 
     try {
@@ -110,20 +110,37 @@ async function checkUserExists() {
 
     } catch (err) {
         console.error("Fehler beim Login-Check:", err);
-        overlayController.toggle();
-
-    } finally {
-        //loaderController.hide();
         loaderTextController.hide();
+        overlayController.toggle();
+    } finally {
+        loaderController.hide();
     }
-
-    //loaderTextController.show();
 }
 
-function googleLogin()  { console.log("Google Login gestartet"); }
-function facebookLogin(){ console.log("Facebook Login gestartet"); }
-function emailLogin()   { console.log("Email Login gestartet"); }
-function gastLogin()    { console.log("Gast Login gestartet"); }
+async function googleLogin() { 
+    console.log("Google Login gestartet");
+    
+    fetch("/login_google", { method: "POST" })
+}
+
+async function facebookLogin() { 
+    console.log("Facebook Login gestartet"); 
+
+    fetch("/login_facebook", { method: "POST" })
+}
+
+async function emailLogin() { 
+    console.log("Email Login gestartet"); 
+
+    fetch("/login_guest", { method: "POST" })
+}
+
+async function gastLogin() { 
+    console.log("Gast Login gestartet"); 
+    loaderTextController.show();
+
+    fetch("/login_guest", { method: "POST" })
+}
 
 overlayController.init();
 loginController.init();
