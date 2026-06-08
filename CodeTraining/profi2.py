@@ -3,6 +3,7 @@ import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from dotenv import load_dotenv
+import uuid
 load_dotenv()
 
 app = Flask(__name__)
@@ -34,6 +35,7 @@ def check_login():
 
     conn = None
     cursor = None
+
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
@@ -42,9 +44,11 @@ def check_login():
             (user_id,)
         )
         user = cursor.fetchone()
+
     except Exception as e:
         print("DB-Fehler:", e)
         return jsonify({"loggedIn": False, "error": "DB_Fehler"})
+    
     finally:
         if cursor:
             cursor.close()
@@ -77,21 +81,7 @@ def login_guest():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    cursor.execute("SELECT * FROM game_users WHERE guest_id = %s", (guest_id,))
-    user = cursor.fetchone()
-
-    if not user:
-        cursor.execute("INSERT INTO game_users (guest_id) VALUES (%s)", (guest_id,))
-        conn.commit()
-
-        cursor.execute("SELECT * FROM game_users WHERE guest_id = %s", (guest_id,))
-        user = cursor.fetchone()
-        session["user_id"] = user["id"]
-
-    return jsonify({
-        "loggedIn": True,
-        "user_id": user["id"]
-    })
+    
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

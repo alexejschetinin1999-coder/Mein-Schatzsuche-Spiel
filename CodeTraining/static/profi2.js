@@ -94,26 +94,26 @@ gameStart.addEventListener("click", () => {
 
 async function checkUserExists() {
 
-    loaderController.show();
+    console.log("Gast Login gestartet"); 
     loaderTextController.show();
+    loaderController.show();
 
     try {
-        const response = await fetch("/check_login");
+        const response = await fetch("/login_guest", { method: "POST" });
         const data = await response.json();
 
-        if (data.loggedIn === true) {
-            console.log("User ist eingeloggt:", data.username);
-        } else {
-            console.log("User ist nicht eingeloggt");
-            overlayController.toggle();
+        loaderTextController.hide();
+        loaderController.hide();
+
+        if (data.loggedIn) {
+            console.log("User ID:", data.user_id);
+            // Weiterleitung oder Overlay schließen
         }
 
     } catch (err) {
-        console.error("Fehler beim Login-Check:", err);
         loaderTextController.hide();
-        overlayController.toggle();
-    } finally {
         loaderController.hide();
+        console.error("Fehler beim Gast-Login:", err);
     }
 }
 
