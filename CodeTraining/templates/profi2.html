@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charakter Arena</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='profi2.css') }}">
+</head>
+<body>
+
+    <div id="first-page">
+
+        <section class="game-info">
+            <p>Version 1.0.3</p>
+            <p>Server: Europa</p>
+            <button class="game-info-buttons" id="login-pfad">Login</button>
+            <button class="game-info-buttons" id="account-change-pfad">Account Wechseln</button>
+        </section>
+
+        <div class="button-start-area">
+            <button id="game-start">Tap to Start</button>
+        </div>
+
+        <div class="overlay hidden" id="login-screen">
+            <div class="login-content" id="login-box">
+                <p id="registrieren-remarker">Du musst dich zuerst registrieren!</p>
+                <h3>Anmeldeoptionen</h3>
+
+                <div class="button-content">
+                    <button class="login-button" id="google-button">
+                        <img src="{{ url_for('static', filename='google.png') }}" class="login-icon" alt="Google">
+                        <span class="icon-name">Google</span>
+                    </button>
+
+                    <button class="login-button" id="facebook-button">
+                        <img src="{{ url_for('static', filename='facebook.png') }}" class="login-icon" alt="Facebook">
+                        <span class="icon-name">Facebook</span>
+                    </button>
+
+                    <button class="login-button" id="email-button">
+                        <img src="{{ url_for('static', filename='email.png') }}" class="login-icon" alt="E-Mail">
+                        <span class="icon-name">E-Mail</span>
+                    </button>
+                </div>
+
+                <h3 id="gast-header">Oder einmal nur zum testen</h3>
+
+                <button class="login-button" id="gast-button"> 
+                    <img src="{{ url_for('static', filename='user.png') }}" class="login-icon" alt="Gast">
+                    <span>Gast</span> 
+                </button>
+            </div>
+        </div>
+
+        <div id="start-messenger" class="hidden">
+            <p id="loader-text">Warten Sie bitte noch einen moment...</p>
+            <div id="spinner"></div>
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='profi2.js') }}"></script>
+</body>
+</html>
