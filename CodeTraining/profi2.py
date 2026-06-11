@@ -20,68 +20,11 @@ def get_db_connection():
     )
     return conn
 
-
+a
 @app.route("/")
 def index():
     return render_template("profi2.html")
 
-
-@app.route("/check_login")
-def check_login():
-    user_id = session.get("user_id")
-
-    if not user_id:
-        return jsonify({"loggedIn": False})
-
-    conn = None
-    cursor = None
-
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute(
-            "SELECT id, username FROM users WHERE id = %s",
-            (user_id,)
-        )
-        user = cursor.fetchone()
-
-    except Exception as e:
-        print("DB-Fehler:", e)
-        return jsonify({"loggedIn": False, "error": "DB_Fehler"})
-    
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
-
-    if not user:
-        session.pop("user_id", None)
-        return jsonify({"loggedIn": False})
-
-    return jsonify({
-        "loggedIn": True,
-        "username": user["username"]
-    })
-
-@app.route("/login_google", methods=["POST"])
-def login_google():
-    print()
-
-@app.route("/login_facebook", methods=["POST"])
-def login_facebook():
-    print()
-
-@app.route("/login_email", methods=["POST"])
-def login_email():
-    print()
-
-@app.route("/login_guest", methods=["POST"])
-def login_guest():
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-
-    
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
