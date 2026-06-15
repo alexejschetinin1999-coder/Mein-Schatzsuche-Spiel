@@ -1,23 +1,36 @@
-const loginPfad = document.getElementById("login-pfad");
-const accountChangePfad = document.getElementById("account-change-pfad");
+const UI = {
+    loginPfad: document.getElementById("login-pfad"),
+    accountChangePfad: document.getElementById("account-change-pfad"),
 
-const gameStart = document.getElementById("game-start");
+    gameStart: document.getElementById("game-start"),
 
-const loginScreen = document.getElementById("login-screen");
-const loginBox = document.getElementById("login-box");
-const registrierenRemarker = document.getElementById("registrieren-remarker");
-const googleButton = document.getElementById("google-button");
-const facebookButton = document.getElementById("facebook-button");
-const emailButton = document.getElementById("email-button");
-const guestButton = document.getElementById("guest-button");
+    loginScreen: document.getElementById("login-screen"),
+    loginBox: document.getElementById("login-box"),
+    registrierenRemarker: document.getElementById("registrieren-remarker"),
+    googleButton: document.getElementById("google-button"),
+    facebookButton: document.getElementById("facebook-button"),
+    emailButton: document.getElementById("email-button"),
 
-const startMessenger = document.getElementById("start-messenger"); 
-const spinner = document.getElementById("spinner");
+    guestButton: document.getElementById("guest-button"),
 
-gameStart.addEventListener("click", () => {
+    startMessenger: document.getElementById("start-messenger"),
+    spinner: document.getElementById("spinner")
+}
+
+
+UI.gameStart.addEventListener("click", () => {
     gameStarterController();
 });
 
 async function gameStarterController() {
-a
+    try {
+        const response = await fetch("/check_user_login");    
+        
+        const result = await response.json();
+        console.log(result);
+    } catch (error) {
+        console.log(error.message);
+    } finally {
+        
+    }
 }

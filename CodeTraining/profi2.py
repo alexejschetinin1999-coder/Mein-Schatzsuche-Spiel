@@ -20,10 +20,34 @@ def get_db_connection():
     )
     return conn
 
-a
+
 @app.route("/")
 def index():
     return render_template("profi2.html")
+
+
+@app.route("/check_user_login")
+def check_user_login():
+    user_id = session.get("user_id")
+
+    if user_id is None:
+        return jsonify({
+            "loggedIn": False,
+            "message": "no session" 
+        })
+    else:
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor(dictionary=True)
+        except:
+            print()
+        finally:
+            print()
+
+        return jsonify({
+            "loggedIn": True,
+            "message": "in game"
+        })
 
 
 if __name__ == "__main__":
