@@ -39,15 +39,32 @@ def check_user_login():
         try:
             conn = get_db_connection()
             cursor = conn.cursor(dictionary=True)
+
+            search_in_sql = "SELECT * FROM game_users WHERE id = %s"
+            
+            cursor.execute(search_in_sql, (user_id,))
+            player = cursor.fetchone()
+
+            if player is None:
+                session.pop("user_id", None)
+                return jsonify({
+                    "loggedIn": False,
+                    "message": "invalid session" 
+                })
+                create_account()
+            else:
+                return jsonify({
+                    "loggedIn": True,
+                    "message": "in game"
+                })
         except:
             print()
         finally:
             print()
 
-        return jsonify({
-            "loggedIn": True,
-            "message": "in game"
-        })
+
+def create_account():
+    print()
 
 
 if __name__ == "__main__":
