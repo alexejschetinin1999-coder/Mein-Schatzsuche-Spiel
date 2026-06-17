@@ -18,19 +18,38 @@ const UI = {
 }
 
 
+const loader = {
+    element: UI.startMessenger,
+
+    show() {
+        this.element.classList.remove("hidden");
+    },
+
+    hide() {
+        this.element.classList.add("hidden");
+    }
+};
+
+
 UI.gameStart.addEventListener("click", () => {
+    loader.show();
     gameStarterController();
 });
 
+
 async function gameStarterController() {
-    try {
-        const response = await fetch("/check_user_login");    
+    const response = await fetch("/check_user_login");    
         
-        const result = await response.json();
-        console.log(result);
-    } catch (error) {
-        console.log(error.message);
-    } finally {
-        
+    const result = await response.json();
+    console.log(result);
+
+    if (result.loggedIn === true) {
+
+    } else if (result.loggedIn === false) {
+
+    } else if (result.error === true) {
+
     }
+
+    loader.hide();
 }

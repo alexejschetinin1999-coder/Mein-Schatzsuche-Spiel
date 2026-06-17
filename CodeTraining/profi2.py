@@ -51,16 +51,28 @@ def check_user_login():
                     "loggedIn": False,
                     "message": "invalid session" 
                 })
-                create_account()
             else:
                 return jsonify({
                     "loggedIn": True,
                     "message": "in game"
                 })
-        except:
-            print()
+        except Exception as e:
+                print(e)
+
+                return jsonify({
+                    "error": True,
+                    "message": "no connection"
+                })
         finally:
-            print()
+            try:
+                cursor.close()
+            except NameError:
+                pass 
+
+            try:
+                conn.close()
+            except NameError:
+                pass
 
 
 def create_account():
