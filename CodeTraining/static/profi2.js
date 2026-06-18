@@ -17,6 +17,7 @@ const UI = {
     spinner: document.getElementById("spinner")
 }
 
+const minTime = 1500;
 
 const loader = {
     element: UI.startMessenger,
@@ -33,11 +34,12 @@ const loader = {
 
 UI.gameStart.addEventListener("click", () => {
     loader.show();
-    gameStarterController();
+    const startTime = Date.now();
+    gameStarterController(startTime);
 });
 
 
-async function gameStarterController() {
+async function gameStarterController(startTime) {
     const response = await fetch("/check_user_login");    
         
     const result = await response.json();
@@ -51,5 +53,11 @@ async function gameStarterController() {
 
     }
 
-    loader.hide();
+    const currentTime = Date.now();
+    const waitTime = currentTime - startTime;
+    const restTime = minTime - waitTime;
+    
+    if (restTime < 0) {
+        loader.hide();
+    } 
 }
