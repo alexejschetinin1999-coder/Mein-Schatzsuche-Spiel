@@ -75,7 +75,20 @@ def check_user_login():
                 pass
 
 
-def create_account():
+@app.route("/create_account_google")
+def create_account_google():
+    print()
+
+@app.route("/create_account_facebook")
+def create_account_facebook():
+    print()
+
+@app.route("/create_account_email")
+def create_account_email():
+    print()
+
+@app.route("/create_account_guest")
+def create_account_guest():
     print()
 
 

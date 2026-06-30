@@ -32,32 +32,67 @@ const loader = {
 };
 
 
-UI.gameStart.addEventListener("click", () => {
+function startGame() {
     loader.show();
     const startTime = Date.now();
     gameStarterController(startTime);
-});
+}
 
+UI.gameStart.addEventListener("click", startGame);
 
 async function gameStarterController(startTime) {
-    const response = await fetch("/check_user_login");    
-        
+    const response = await fetch("/check_user_login");
     const result = await response.json();
-    console.log(result);
 
+    finishLoaderTiming(startTime);
+    handleLoginResult(result);
+}
+
+
+function handleLoginResult(result) {
     if (result.loggedIn === true) {
-
-    } else if (result.loggedIn === false) {
-
-    } else if (result.error === true) {
 
     }
 
-    const currentTime = Date.now();
-    const waitTime = currentTime - startTime;
+    else if (result.loggedIn === false) {
+        UI.loginScreen.classList.remove("hidden");
+        UI.loginBox.classList.remove("hidden");
+    }
+
+    else if (result.error === true) {
+        alert("Es ist ein Fehler aufgetreten.");
+    }
+}
+
+
+async function googleLogin() {
+    const loginRoute = await fetch("/create_account_google");
+    const googleRoute = await loginRoute.json();
+}
+
+async function facebookLogin() {
+    const loginRoute = await fetch("/create_account_facebook");
+    const facebookRoute = await loginRoute.json();   
+}
+
+async function emailLogin() {
+    const loginRoute = await fetch("/create_account_email");
+    const emailRoute = await loginRoute.json();
+}
+
+async function guestLogin() {
+    const loginRoute = await fetch("/create_account_guest");
+    const guestRoute = await loginRoute.json();
+}
+
+
+function finishLoaderTiming(startTime) {
+    const waitTime = Date.now() - startTime;
     const restTime = minTime - waitTime;
-    
-    if (restTime < 0) {
+
+    if (restTime <= 0) {
         loader.hide();
-    } 
+    } else {
+        setTimeout(() => loader.hide(), restTime);
+    }
 }
